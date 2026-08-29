@@ -56,6 +56,7 @@ export default function PanelPage() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [acting, setActing] = useState<number | null>(null);
   const [blockDate, setBlockDate] = useState("");
+  const [blockDateEnd, setBlockDateEnd] = useState("");
   const [blockNote, setBlockNote] = useState("");
   const [blockMsg, setBlockMsg] = useState<string | null>(null);
   const [blockBusy, setBlockBusy] = useState(false);
@@ -209,15 +210,31 @@ export default function PanelPage() {
     if (!blockDate || blockBusy) return;
     setBlockBusy(true);
     setBlockMsg(null);
+
+    // Generar rango de fechas
+    const dates: string[] = [];
+    const end = blockDateEnd && blockDateEnd >= blockDate ? blockDateEnd : blockDate;
+    const cur = new Date(blockDate + "T00:00:00");
+    const last = new Date(end + "T00:00:00");
+    while (cur <= last) {
+      dates.push(cur.toISOString().slice(0, 10));
+      cur.setDate(cur.getDate() + 1);
+    }
+
     try {
-      const r = await fetch("/api/blocked", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: blockDate, note: blockNote }),
-      });
-      const d = await r.json();
-      if (!r.ok) throw new Error(d.error ?? "No se pudo bloquear.");
+      let lastError: string | null = null;
+      for (const date of dates) {
+        const r = await fetch("/api/blocked", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date, note: blockNote }),
+        });
+        const d = await r.json();
+        if (!r.ok) lastError = d.error ?? "No se pudo bloquear.";
+      }
+      if (lastError) throw new Error(lastError);
       setBlockDate("");
+      setBlockDateEnd("");
       setBlockNote("");
       load();
     } catch (err) {
@@ -732,16 +749,32 @@ export default function PanelPage() {
 
           <div className="border border-line bg-cream p-5 sm:p-6">
             <form onSubmit={addBlocked} className="flex flex-wrap items-end gap-4">
-              <div className="min-w-[180px]">
+              <div className="min-w-[160px]">
                 <label className="mb-1 block text-[11.5px] font-semibold uppercase tracking-wider text-ink-soft">
-                  Fecha a bloquear
+                  Desde
                 </label>
                 <input
                   type="date"
                   min={localISO()}
                   value={blockDate}
-                  onChange={(e) => setBlockDate(e.target.value)}
+                  onChange={(e) => {
+                    setBlockDate(e.target.value);
+                    if (blockDateEnd && e.target.value > blockDateEnd) setBlockDateEnd("");
+                  }}
                   required
+                  className="w-full border border-line bg-linen/50 px-3 py-2 text-sm outline-none focus:border-ocean"
+                />
+              </div>
+
+              <div className="min-w-[160px]">
+                <label className="mb-1 block text-[11.5px] font-semibold uppercase tracking-wider text-ink-soft">
+                  Hasta <span className="normal-case font-normal">(opcional)</span>
+                </label>
+                <input
+                  type="date"
+                  min={blockDate || localISO()}
+                  value={blockDateEnd}
+                  onChange={(e) => setBlockDateEnd(e.target.value)}
                   className="w-full border border-line bg-linen/50 px-3 py-2 text-sm outline-none focus:border-ocean"
                 />
               </div>
@@ -764,7 +797,11 @@ export default function PanelPage() {
                 disabled={!blockDate || blockBusy}
                 className="bg-ocean px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-ocean-light disabled:opacity-50"
               >
-                {blockBusy ? "Bloqueando…" : "Bloquear fecha"}
+                {blockBusy
+                  ? "Bloqueando…"
+                  : blockDateEnd && blockDateEnd > blockDate
+                  ? "Bloquear rango"
+                  : "Bloquear fecha"}
               </button>
             </form>
 

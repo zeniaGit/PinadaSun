@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import "leaflet/dist/leaflet.css";
 import { APARTMENT } from "@/lib/apartment";
 import { IconPin, IconExternalLink } from "@/components/icons";
 
@@ -27,6 +26,7 @@ export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
 
     let isMounted = true;
 
+    import("leaflet/dist/leaflet.css");
     import("leaflet").then((L) => {
       if (!isMounted || !mapContainerRef.current || mapInstanceRef.current) return;
 
@@ -56,10 +56,10 @@ export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
       const customHouseIcon = L.divIcon({
         className: "custom-house-pin",
         html: `
-          <div class="relative flex items-center justify-center">
+          <div class="relative flex items-center justify-center" aria-label="Ubicación de la propiedad" role="img">
             <span class="absolute -inset-2 rounded-full bg-sun/40 animate-ping"></span>
             <div class="relative flex h-11 w-11 items-center justify-center rounded-full bg-pine-deep p-2 text-sun-light shadow-xl border-2 border-sun">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               </svg>
             </div>

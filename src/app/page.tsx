@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Header } from "@/components/header";
 import { Reveal, MaskLines } from "@/components/reveal";
 import { BookingWidget, StarRow } from "@/components/booking/booking-widget";
@@ -77,13 +78,14 @@ export default function Home() {
       {/* ═══ HERO ═══ */}
       <section className="relative flex min-h-svh flex-col justify-end">
         <div className="absolute inset-0 overflow-hidden">
-          <img
+          <Image
             src={IMAGES.hero}
             alt="Gran terraza privada de Pinada Sun con pérgola y barbacoa"
-            className="kb h-full w-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+            className="kb object-cover"
+            fill
+            priority
+            sizes="100vw"
+            quality={85}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-pine-deep via-pine-deep/70 to-pine-deep/40" />
           <div className="absolute inset-0 bg-black/25" />
