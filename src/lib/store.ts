@@ -1,5 +1,12 @@
 import { db, hasValidDb } from "@/db";
-import { bookings, blockedDates, type Booking, type BlockedDate } from "@/db/schema";
+import {
+  bookings,
+  blockedDates,
+  visitorSessions,
+  type Booking,
+  type BlockedDate,
+  type VisitorSession,
+} from "@/db/schema";
 import { and, asc, desc, eq, gt, gte, inArray, lt, sql } from "drizzle-orm";
 import fs from "fs";
 import path from "path";
@@ -30,6 +37,26 @@ export async function ensureSchema() {
         note TEXT,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
+      CREATE TABLE IF NOT EXISTS visitor_sessions (
+        id SERIAL PRIMARY KEY,
+        session_id TEXT NOT NULL,
+        ip TEXT NOT NULL,
+        country TEXT,
+        country_code TEXT,
+        city TEXT,
+        device TEXT NOT NULL DEFAULT 'Desconocido',
+        os TEXT NOT NULL DEFAULT 'Desconocido',
+        browser TEXT NOT NULL DEFAULT 'Desconocido',
+        is_bot BOOLEAN NOT NULL DEFAULT FALSE,
+        bot_name TEXT,
+        page TEXT NOT NULL DEFAULT '/',
+        referrer TEXT,
+        duration_seconds INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE INDEX IF NOT EXISTS idx_visitor_sessions_session_id ON visitor_sessions (session_id);
+      CREATE INDEX IF NOT EXISTS idx_visitor_sessions_created_at ON visitor_sessions (created_at DESC);
     `);
     schemaInitialized = true;
   } catch (err) {
@@ -41,8 +68,10 @@ export async function ensureSchema() {
 interface LocalData {
   bookings: Booking[];
   blocked: BlockedDate[];
+  visitorSessions: VisitorSession[];
   nextBookingId: number;
   nextBlockedId: number;
+  nextSessionId: number;
 }
 
 const DATA_DIR = path.join(process.cwd(), ".data");
@@ -55,14 +84,24 @@ function getLocalData(): LocalData {
     }
     if (fs.existsSync(DATA_FILE)) {
       const content = fs.readFileSync(DATA_FILE, "utf-8");
-      return JSON.parse(content);
+      const parsed = JSON.parse(content);
+      return {
+        bookings: parsed.bookings || [],
+        blocked: parsed.blocked || [],
+        visitorSessions: parsed.visitorSessions || [],
+        nextBookingId: parsed.nextBookingId || 1,
+        nextBlockedId: parsed.nextBlockedId || 1,
+        nextSessionId: parsed.nextSessionId || 1,
+      };
     }
   } catch {}
   return {
     bookings: [],
     blocked: [],
+    visitorSessions: [],
     nextBookingId: 1,
     nextBlockedId: 1,
+    nextSessionId: 1,
   };
 }
 
@@ -357,8 +396,222 @@ export async function getPanelData(): Promise<{
   };
 }
 
+// ── Registro y Analítica de Visitantes ──
+
+export async function recordVisitorSession(input: {
+  sessionId: string;
+  ip: string;
+  country: string;
+  countryCode: string;
+  city: string;
+  device: string;
+  os: string;
+  browser: string;
+  isBot: boolean;
+  botName: string | null;
+  page: string;
+  referrer: string | null;
+}): Promise<void> {
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      // Si la sesión ya existe en los últimos 30 min, actualizamos la última página
+      const existing = await db
+        .select({ id: visitorSessions.id })
+        .from(visitorSessions)
+        .where(eq(visitorSessions.sessionId, input.sessionId))
+        .limit(1);
+
+      if (existing.length > 0) {
+        await db
+          .update(visitorSessions)
+          .set({
+            page: input.page,
+            updatedAt: new Date(),
+          })
+          .where(eq(visitorSessions.id, existing[0].id));
+        return;
+      }
+
+      await db.insert(visitorSessions).values({
+        ...input,
+        durationSeconds: 0,
+      });
+      return;
+    } catch (err) {
+      console.warn("DB recordVisitorSession error, falling back to local storage:", err);
+    }
+  }
+
+  // Fallback Local
+  const data = getLocalData();
+  const existing = data.visitorSessions.find((s) => s.sessionId === input.sessionId);
+  if (existing) {
+    existing.page = input.page;
+    existing.updatedAt = new Date();
+  } else {
+    const id = data.nextSessionId++;
+    const now = new Date();
+    data.visitorSessions.unshift({
+      id,
+      ...input,
+      durationSeconds: 0,
+      createdAt: now,
+      updatedAt: now,
+    });
+    // Limitar historial local a 500 registros para no sobrecargar
+    if (data.visitorSessions.length > 500) {
+      data.visitorSessions = data.visitorSessions.slice(0, 500);
+    }
+  }
+  saveLocalData(data);
+}
+
+export async function updateSessionDuration(
+  sessionId: string,
+  durationSeconds: number,
+  page?: string,
+): Promise<void> {
+  const safeDuration = Math.max(0, Math.min(86400, Math.round(durationSeconds)));
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      const updateData: Record<string, any> = {
+        durationSeconds: safeDuration,
+        updatedAt: new Date(),
+      };
+      if (page) updateData.page = page;
+
+      await db
+        .update(visitorSessions)
+        .set(updateData)
+        .where(eq(visitorSessions.sessionId, sessionId));
+      return;
+    } catch (err) {
+      console.warn("DB updateSessionDuration error, using local fallback:", err);
+    }
+  }
+
+  const data = getLocalData();
+  const s = data.visitorSessions.find((item) => item.sessionId === sessionId);
+  if (s) {
+    s.durationSeconds = safeDuration;
+    if (page) s.page = page;
+    s.updatedAt = new Date();
+    saveLocalData(data);
+  }
+}
+
+export interface VisitorAnalyticsSummary {
+  totalVisits: number;
+  realVisits: number;
+  botVisits: number;
+  avgDurationSeconds: number;
+  mobileCount: number;
+  desktopCount: number;
+  tabletCount: number;
+  topCountries: Array<{ code: string; name: string; count: number }>;
+  topPages: Array<{ page: string; count: number }>;
+  recentVisitors: VisitorSession[];
+}
+
+export async function getVisitorAnalytics(limit = 150): Promise<VisitorAnalyticsSummary> {
+  let sessions: VisitorSession[] = [];
+
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      sessions = await db
+        .select()
+        .from(visitorSessions)
+        .orderBy(desc(visitorSessions.createdAt))
+        .limit(limit);
+    } catch (err) {
+      console.warn("DB getVisitorAnalytics error, using local fallback:", err);
+    }
+  }
+
+  if (sessions.length === 0) {
+    const data = getLocalData();
+    sessions = [...data.visitorSessions]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+  }
+
+  const totalVisits = sessions.length;
+  const botVisits = sessions.filter((s) => s.isBot).length;
+  const realVisits = totalVisits - botVisits;
+
+  const realSessions = sessions.filter((s) => !s.isBot);
+  const totalDuration = realSessions.reduce((acc, s) => acc + (s.durationSeconds || 0), 0);
+  const avgDurationSeconds = realSessions.length > 0 ? Math.round(totalDuration / realSessions.length) : 0;
+
+  let mobileCount = 0;
+  let desktopCount = 0;
+  let tabletCount = 0;
+
+  const countryMap: Record<string, { code: string; name: string; count: number }> = {};
+  const pageMap: Record<string, number> = {};
+
+  for (const s of sessions) {
+    if (s.device === "Móvil") mobileCount++;
+    else if (s.device === "Tablet") tabletCount++;
+    else desktopCount++;
+
+    const cCode = s.countryCode || "ES";
+    const cName = s.country || "España";
+    if (!countryMap[cCode]) {
+      countryMap[cCode] = { code: cCode, name: cName, count: 0 };
+    }
+    countryMap[cCode].count++;
+
+    const p = s.page || "/";
+    pageMap[p] = (pageMap[p] || 0) + 1;
+  }
+
+  const topCountries = Object.values(countryMap)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
+
+  const topPages = Object.entries(pageMap)
+    .map(([page, count]) => ({ page, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
+
+  return {
+    totalVisits,
+    realVisits,
+    botVisits,
+    avgDurationSeconds,
+    mobileCount,
+    desktopCount,
+    tabletCount,
+    topCountries,
+    topPages,
+    recentVisitors: sessions,
+  };
+}
+
+export async function clearVisitorAnalytics(): Promise<boolean> {
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      await db.delete(visitorSessions);
+    } catch (err) {
+      console.warn("DB clearVisitorAnalytics error, fallback to local:", err);
+    }
+  }
+
+  const data = getLocalData();
+  data.visitorSessions = [];
+  data.nextSessionId = 1;
+  saveLocalData(data);
+  return true;
+}
+
 function addOneDay(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   const next = new Date(Date.UTC(y, m - 1, d + 1));
   return next.toISOString().slice(0, 10);
 }
+

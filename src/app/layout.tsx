@@ -4,6 +4,7 @@ import { Fraunces, Manrope } from "next/font/google";
 import Script from "next/script";
 import { StructuredData } from "@/components/structured-data";
 import { CookieBanner } from "@/components/cookie-banner";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -145,6 +146,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </Script>
         {children}
         <CookieBanner />
+        <AnalyticsTracker />
       </body>
     </html>
   );

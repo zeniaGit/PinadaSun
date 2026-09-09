@@ -13,8 +13,15 @@ import {
   IconCopy,
   IconExternalLink,
   IconStar,
+  IconRefresh,
+  IconGlobe,
+  IconSmartphone,
+  IconMonitor,
+  IconBot,
+  IconClock,
 } from "@/components/icons";
 import { Logo } from "@/components/logo";
+import { getCountryFlag } from "@/lib/analytics";
 
 type BookingRow = {
   id: number;
@@ -37,6 +44,38 @@ type BlockedRow = {
   note: string | null;
 };
 
+type VisitorSessionRow = {
+  id: number;
+  sessionId: string;
+  ip: string;
+  country: string | null;
+  countryCode: string | null;
+  city: string | null;
+  device: string;
+  os: string;
+  browser: string;
+  isBot: boolean;
+  botName: string | null;
+  page: string;
+  referrer: string | null;
+  durationSeconds: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type AnalyticsData = {
+  totalVisits: number;
+  realVisits: number;
+  botVisits: number;
+  avgDurationSeconds: number;
+  mobileCount: number;
+  desktopCount: number;
+  tabletCount: number;
+  topCountries: Array<{ code: string; name: string; count: number }>;
+  topPages: Array<{ page: string; count: number }>;
+  recentVisitors: VisitorSessionRow[];
+};
+
 type PanelData = { bookings: BookingRow[]; blocked: BlockedRow[] };
 
 const BADGE: Record<BookingRow["status"], string> = {
@@ -45,12 +84,58 @@ const BADGE: Record<BookingRow["status"], string> = {
   cancelada: "bg-ink/5 text-ink-soft border-line",
 };
 
+function fmtDuration(seconds: number): string {
+  if (!seconds || seconds <= 5) return "< 5 seg";
+  if (seconds < 60) return `${seconds} seg`;
+  const mins = Math.floor(seconds / 60);
+  const remSec = seconds % 60;
+  if (mins < 60) {
+    return remSec > 0 ? `${mins}m ${remSec}s` : `${mins} min`;
+  }
+  const hours = Math.floor(mins / 60);
+  const remMins = mins % 60;
+  return `${hours}h ${remMins}m`;
+}
+
+function fmtRelativeTime(dateStr: string): string {
+  try {
+    const diff = Math.round((Date.now() - new Date(dateStr).getTime()) / 1000);
+    if (diff < 15) return "Ahora mismo";
+    if (diff < 60) return `Hace ${diff} seg`;
+    const mins = Math.floor(diff / 60);
+    if (mins < 60) return `Hace ${mins} min`;
+    const hours = Math.floor(diff / 60);
+    if (hours < 24) return `Hace ${hours} h`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return "Ayer";
+    if (days < 7) return `Hace ${days} días`;
+    return new Date(dateStr).toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return dateStr;
+  }
+}
+
 export default function PanelPage() {
   const [authed, setAuthed] = useState<boolean | null>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loginBusy, setLoginBusy] = useState(false);
+
+  // Pestaña activa
+  const [activeTab, setActiveTab] = useState<"reservas" | "trafico">("reservas");
+
+  // Estado analítica web
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+  const [analyticsBusy, setAnalyticsBusy] = useState(false);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
+  const [botFilter, setBotFilter] = useState<"all" | "real" | "bots">("all");
+  const [trafficSearch, setTrafficSearch] = useState("");
 
   const [data, setData] = useState<PanelData | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -99,6 +184,75 @@ export default function PanelPage() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  const loadAnalytics = useCallback(async () => {
+    setAnalyticsBusy(true);
+    setAnalyticsError(null);
+    try {
+      const r = await fetch("/api/analytics/stats", { cache: "no-store" });
+      if (r.status === 401) {
+        setAuthed(false);
+        return;
+      }
+      if (!r.ok) throw new Error();
+      const res = (await r.json()) as AnalyticsData;
+      setAnalytics(res);
+    } catch {
+      setAnalyticsError("No se pudieron cargar las estadísticas de tráfico.");
+    } finally {
+      setAnalyticsBusy(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (authed && activeTab === "trafico" && !analytics) {
+      loadAnalytics();
+    }
+  }, [authed, activeTab, analytics, loadAnalytics]);
+
+  async function handleClearAnalytics() {
+    if (!confirm("¿Estás seguro de que deseas borrar todo el registro de analítica y visitas?")) {
+      return;
+    }
+    setAnalyticsBusy(true);
+    try {
+      const r = await fetch("/api/analytics/stats", { method: "DELETE" });
+      if (r.ok) {
+        loadAnalytics();
+      }
+    } catch {
+      alert("Error al intentar limpiar las estadísticas.");
+    } finally {
+      setAnalyticsBusy(false);
+    }
+  }
+
+  const filteredVisitors = useMemo(() => {
+    if (!analytics?.recentVisitors) return [];
+    let list = analytics.recentVisitors;
+
+    if (botFilter === "real") {
+      list = list.filter((v) => !v.isBot);
+    } else if (botFilter === "bots") {
+      list = list.filter((v) => v.isBot);
+    }
+
+    if (trafficSearch.trim()) {
+      const q = trafficSearch.toLowerCase().trim();
+      list = list.filter(
+        (v) =>
+          v.ip.toLowerCase().includes(q) ||
+          (v.country && v.country.toLowerCase().includes(q)) ||
+          (v.city && v.city.toLowerCase().includes(q)) ||
+          (v.botName && v.botName.toLowerCase().includes(q)) ||
+          v.os.toLowerCase().includes(q) ||
+          v.browser.toLowerCase().includes(q) ||
+          v.page.toLowerCase().includes(q)
+      );
+    }
+
+    return list;
+  }, [analytics?.recentVisitors, botFilter, trafficSearch]);
 
   const load = useCallback(async () => {
     try {
@@ -504,7 +658,44 @@ export default function PanelPage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-5 py-10 md:px-8">
-        {/* Métricas */}
+        {/* Selector de Pestañas: Reservas vs Tráfico */}
+        <div className="flex border-b border-line gap-2 mb-8">
+          <button
+            onClick={() => setActiveTab("reservas")}
+            className={`flex items-center gap-2 px-5 py-3 text-sm font-bold transition-all border-b-2 -mb-px ${
+              activeTab === "reservas"
+                ? "border-ocean text-ocean bg-cream"
+                : "border-transparent text-ink-soft hover:text-ink hover:bg-linen/50"
+            }`}
+          >
+            <IconCalendar className="h-4 w-4" />
+            Reservas & Calendario
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab("trafico");
+              loadAnalytics();
+            }}
+            className={`flex items-center gap-2 px-5 py-3 text-sm font-bold transition-all border-b-2 -mb-px ${
+              activeTab === "trafico"
+                ? "border-ocean text-ocean bg-cream"
+                : "border-transparent text-ink-soft hover:text-ink hover:bg-linen/50"
+            }`}
+          >
+            <IconGlobe className="h-4 w-4" />
+            Tráfico & Analítica
+            {analytics && analytics.totalVisits > 0 && (
+              <span className="ml-1 rounded-full bg-ocean/10 px-2 py-0.5 text-[11px] font-semibold text-ocean">
+                {analytics.totalVisits}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {activeTab === "reservas" && (
+          <>
+{/* Métricas */}
         <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="border border-line bg-cream p-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-soft">
@@ -840,6 +1031,373 @@ export default function PanelPage() {
             </div>
           </div>
         </section>
+          </>
+        )}
+
+        {activeTab === "trafico" && (
+          <div>
+            {/* Cabecera de la sección de Analítica */}
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="font-display text-2xl text-ocean">
+                  Tráfico y Visitantes en Tiempo Real
+                </h2>
+                <p className="text-[13px] text-ink-soft">
+                  Registro de IPs cazadas, países, dispositivos, tiempo de permanencia y clasificación de Bots vs Humanos.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={loadAnalytics}
+                  disabled={analyticsBusy}
+                  className="inline-flex items-center gap-1.5 border border-line bg-cream px-3.5 py-2 text-xs font-semibold text-ocean shadow-xs transition-all hover:bg-ocean/5 disabled:opacity-50"
+                  title="Actualizar datos de tráfico ahora"
+                >
+                  <IconRefresh className={`h-3.5 w-3.5 ${analyticsBusy ? "spin" : ""}`} />
+                  {analyticsBusy ? "Actualizando…" : "Actualizar"}
+                </button>
+
+                {analytics && analytics.totalVisits > 0 && (
+                  <button
+                    onClick={handleClearAnalytics}
+                    disabled={analyticsBusy}
+                    className="inline-flex items-center gap-1.5 border border-rose-200 bg-rose-50/80 px-3 py-2 text-xs font-semibold text-rose-700 transition-colors hover:bg-rose-100 disabled:opacity-50"
+                    title="Vaciar historial de visitas"
+                  >
+                    <IconTrash className="h-3.5 w-3.5" />
+                    Vaciar historial
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {analyticsError && (
+              <div className="mb-6 border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                {analyticsError}
+              </div>
+            )}
+
+            {/* Tarjetas KPI de Tráfico */}
+            <section className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              {/* Visitas Totales */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Total Visitas
+                  </p>
+                  <IconGlobe className="h-4 w-4 text-ocean" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-ocean sm:text-3xl">
+                  {analytics?.totalVisits ?? 0}
+                </p>
+              </div>
+
+              {/* Visitas Reales / Humanos */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Humanos / Reales
+                  </p>
+                  <span className="flex h-2 w-2 rounded-full bg-sage ring-4 ring-sage/20" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-sage sm:text-3xl">
+                  {analytics?.realVisits ?? 0}
+                </p>
+                <p className="mt-1 text-[11px] text-ink-soft">
+                  {analytics?.totalVisits
+                    ? Math.round((analytics.realVisits / analytics.totalVisits) * 100)
+                    : 0}% del tráfico
+                </p>
+              </div>
+
+              {/* Bots y Rastreadores */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Bots / Crawlers
+                  </p>
+                  <IconBot className="h-4 w-4 text-amber-600" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-amber-700 sm:text-3xl">
+                  {analytics?.botVisits ?? 0}
+                </p>
+                <p className="mt-1 text-[11px] text-ink-soft">
+                  Google, SEO, scripts
+                </p>
+              </div>
+
+              {/* Tiempo Medio en la Web */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Tiempo Medio
+                  </p>
+                  <IconClock className="h-4 w-4 text-ocean-light" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-ocean-light sm:text-3xl">
+                  {fmtDuration(analytics?.avgDurationSeconds ?? 0)}
+                </p>
+                <p className="mt-1 text-[11px] text-ink-soft">
+                  Por usuario real
+                </p>
+              </div>
+
+              {/* Dispositivos Móviles */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Móvil
+                  </p>
+                  <IconSmartphone className="h-4 w-4 text-ink" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-ink sm:text-3xl">
+                  {analytics?.mobileCount ?? 0}
+                </p>
+                <p className="mt-1 text-[11px] text-ink-soft">
+                  {analytics?.totalVisits
+                    ? Math.round((analytics.mobileCount / analytics.totalVisits) * 100)
+                    : 0}% del total
+                </p>
+              </div>
+
+              {/* Ordenador */}
+              <div className="border border-line bg-cream p-4 sm:p-5">
+                <div className="flex items-center justify-between text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                    Ordenador
+                  </p>
+                  <IconMonitor className="h-4 w-4 text-ink" />
+                </div>
+                <p className="tnum mt-2 font-display text-2xl font-bold text-ink sm:text-3xl">
+                  {analytics?.desktopCount ?? 0}
+                </p>
+                <p className="mt-1 text-[11px] text-ink-soft">
+                  {analytics?.totalVisits
+                    ? Math.round((analytics.desktopCount / analytics.totalVisits) * 100)
+                    : 0}% del total
+                </p>
+              </div>
+            </section>
+
+            {/* Países Principales y Páginas Más Visitadas */}
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+              {/* Países */}
+              <div className="border border-line bg-cream p-5">
+                <h3 className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
+                  <IconGlobe className="h-4 w-4 text-ocean" />
+                  Principales Países de Origen
+                </h3>
+
+                {(!analytics?.topCountries || analytics.topCountries.length === 0) ? (
+                  <p className="mt-3 text-[13px] text-ink-soft">Aún no hay datos de países registrados.</p>
+                ) : (
+                  <div className="mt-4 space-y-2.5">
+                    {analytics.topCountries.map((c) => (
+                      <div key={c.code} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{getCountryFlag(c.code)}</span>
+                          <span className="font-medium text-ink">{c.name}</span>
+                          <span className="text-xs text-ink-soft">({c.code})</span>
+                        </div>
+                        <span className="tnum font-semibold text-ocean">
+                          {c.count} {c.count === 1 ? "visita" : "visitas"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Páginas Más Vistas */}
+              <div className="border border-line bg-cream p-5">
+                <h3 className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
+                  <IconCalendar className="h-4 w-4 text-ocean" />
+                  Páginas Más Visitadas
+                </h3>
+
+                {(!analytics?.topPages || analytics.topPages.length === 0) ? (
+                  <p className="mt-3 text-[13px] text-ink-soft">Aún no hay datos de páginas navegadas.</p>
+                ) : (
+                  <div className="mt-4 space-y-2.5">
+                    {analytics.topPages.map((p) => (
+                      <div key={p.page} className="flex items-center justify-between text-sm">
+                        <span className="font-mono text-[13px] text-ink truncate max-w-[240px]">
+                          {p.page}
+                        </span>
+                        <span className="tnum font-semibold text-sage">
+                          {p.count} {p.count === 1 ? "vista" : "vistas"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Barra de Filtros y Búsqueda */}
+            <div className="mt-8 border border-line bg-cream p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => setBotFilter("all")}
+                    className={`px-3 py-1.5 text-xs font-semibold transition-all ${
+                      botFilter === "all"
+                        ? "bg-ocean text-white"
+                        : "bg-linen text-ink-soft hover:text-ink"
+                    }`}
+                  >
+                    Todos ({analytics?.totalVisits ?? 0})
+                  </button>
+
+                  <button
+                    onClick={() => setBotFilter("real")}
+                    className={`px-3 py-1.5 text-xs font-semibold transition-all ${
+                      botFilter === "real"
+                        ? "bg-sage text-white"
+                        : "bg-linen text-ink-soft hover:text-ink"
+                    }`}
+                  >
+                    Solo Humanos ({analytics?.realVisits ?? 0})
+                  </button>
+
+                  <button
+                    onClick={() => setBotFilter("bots")}
+                    className={`px-3 py-1.5 text-xs font-semibold transition-all ${
+                      botFilter === "bots"
+                        ? "bg-amber-700 text-white"
+                        : "bg-linen text-ink-soft hover:text-ink"
+                    }`}
+                  >
+                    Solo Bots ({analytics?.botVisits ?? 0})
+                  </button>
+                </div>
+
+                <div className="w-full sm:w-auto">
+                  <input
+                    type="text"
+                    placeholder="Buscar IP, país, SO o bot…"
+                    value={trafficSearch}
+                    onChange={(e) => setTrafficSearch(e.target.value)}
+                    className="w-full sm:w-64 border border-line bg-linen/50 px-3 py-1.5 text-xs outline-none focus:border-ocean focus:bg-cream"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Tabla de Visitas Registradas */}
+            <div className="mt-4 overflow-x-auto border border-line bg-cream shadow-xs">
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-line bg-linen/70 text-[11px] font-bold uppercase tracking-wider text-ink-soft">
+                  <tr>
+                    <th className="px-4 py-3">Tipo / Estado</th>
+                    <th className="px-4 py-3">Dirección IP</th>
+                    <th className="px-4 py-3">País / Ubicación</th>
+                    <th className="px-4 py-3">Dispositivo & SO</th>
+                    <th className="px-4 py-3">Página & Origen</th>
+                    <th className="px-4 py-3 text-right">Tiempo en la Web</th>
+                    <th className="px-4 py-3 text-right">Hora</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-line/60">
+                  {filteredVisitors.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-4 py-8 text-center text-ink-soft">
+                        {analyticsBusy ? "Cargando registros…" : "No hay visitas que coincidan con el filtro."}
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredVisitors.map((v) => (
+                      <tr key={v.id} className="hover:bg-linen/30 transition-colors">
+                        {/* Tipo / Bot o Humano */}
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {v.isBot ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-800 border border-amber-500/20">
+                              <IconBot className="h-3 w-3" />
+                              {v.botName || "Bot"}
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-sage/15 px-2.5 py-0.5 text-[11px] font-semibold text-sage border border-sage/30">
+                              <span className="h-1.5 w-1.5 rounded-full bg-sage" />
+                              Humano
+                            </span>
+                          )}
+                        </td>
+
+                        {/* IP */}
+                        <td className="px-4 py-3 font-mono font-medium text-ocean whitespace-nowrap">
+                          {v.ip}
+                        </td>
+
+                        {/* País */}
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-sm">{getCountryFlag(v.countryCode)}</span>
+                            <span className="font-medium text-ink">{v.country || "Desconocido"}</span>
+                            {v.city && <span className="text-ink-soft text-[11px]">({v.city})</span>}
+                          </div>
+                        </td>
+
+                        {/* Dispositivo y SO */}
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-ink">
+                              {v.device} · {v.browser}
+                            </span>
+                            <span className="text-[11px] text-ink-soft">{v.os}</span>
+                          </div>
+                        </td>
+
+                        {/* Página y Referrer */}
+                        <td className="px-4 py-3 max-w-[200px]">
+                          <div className="flex flex-col truncate">
+                            <span className="font-mono text-[11.5px] font-medium text-ocean">
+                              {v.page}
+                            </span>
+                            {v.referrer ? (
+                              <span className="text-[10.5px] text-ink-soft truncate" title={v.referrer}>
+                                De: {v.referrer.replace(/^https?:\/\/(www\.)?/, "")}
+                              </span>
+                            ) : (
+                              <span className="text-[10.5px] text-ink-soft/70">Tráfico directo</span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Tiempo de Estancia */}
+                        <td className="px-4 py-3 text-right whitespace-nowrap">
+                          <span
+                            className={`inline-block font-mono font-bold text-xs ${
+                              v.durationSeconds >= 60
+                                ? "text-sage"
+                                : v.durationSeconds > 10
+                                ? "text-ocean"
+                                : "text-ink-soft"
+                            }`}
+                          >
+                            {fmtDuration(v.durationSeconds)}
+                          </span>
+                        </td>
+
+                        {/* Hora y Fecha */}
+                        <td className="px-4 py-3 text-right text-ink-soft whitespace-nowrap text-[11.5px]">
+                          <span title={new Date(v.createdAt).toLocaleString("es-ES")}>
+                            {fmtRelativeTime(v.createdAt)}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Nota técnica al pie */}
+            <p className="mt-3 text-[11px] text-ink-soft">
+              * El tiempo de permanencia se actualiza en vivo mediante balizas periódicas mientras el usuario navega por la web.
+            </p>
+          </div>
+        )}
       </main>
     </div>
   );

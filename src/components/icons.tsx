@@ -250,6 +250,45 @@ export const IconExternalLink = (p: P) => (
   </svg>
 );
 
+export const IconRefresh = (p: P) => (
+  <svg {...base(p)}>
+    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.19" />
+  </svg>
+);
+
+export const IconGlobe = (p: P) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="2" y1="12" x2="22" y2="12" />
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+);
+
+export const IconSmartphone = (p: P) => (
+  <svg {...base(p)}>
+    <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+    <path d="M12 18h.01" />
+  </svg>
+);
+
+export const IconMonitor = (p: P) => (
+  <svg {...base(p)}>
+    <rect width="20" height="14" x="2" y="3" rx="2" />
+    <line x1="8" y1="21" x2="16" y2="21" />
+    <line x1="12" y1="17" x2="12" y2="21" />
+  </svg>
+);
+
+export const IconBot = (p: P) => (
+  <svg {...base(p)}>
+    <rect width="18" height="12" x="3" y="6" rx="2" />
+    <path d="M12 2v4" />
+    <path d="M9 12v-1" />
+    <path d="M15 12v-1" />
+    <path d="M9 16h6" />
+  </svg>
+);
+
 const AMENITY_MAP: Record<string, (p: P) => React.ReactElement> = {
   wifi: IconWifi,
   pot: IconPot,
