@@ -70,7 +70,12 @@ function SectionLabel({
   );
 }
 
-export default function Home() {
+import { getUniqueIpCount } from "@/lib/store";
+import { unstable_noStore as noStore } from "next/cache";
+
+export default async function Home() {
+  noStore();
+  const uniqueVisits = await getUniqueIpCount();
   return (
     <div id="top" className="overflow-x-clip bg-linen">
       <Header />
@@ -641,6 +646,10 @@ export default function Home() {
               >
                 Guía Local de Orihuela Costa
               </a>
+              <span className="hidden sm:inline text-cream/20">|</span>
+              <span title="Visitantes únicos contabilizados por IP" className="flex items-center gap-1.5 text-cream/70">
+                <span className="text-[14px]">👁</span> {uniqueVisits} visitas
+              </span>
             </div>
             <a href="/panel" className="transition-colors hover:text-sun-light">
               Panel de administración →

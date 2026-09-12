@@ -11,33 +11,33 @@ import { APARTMENT } from "@/lib/apartment";
 import { VisitCounter } from "@/components/visit-counter";
 
 export const metadata: Metadata = {
-  title: "Guía Local de Orihuela Costa & Villamartín | Consejos, Normas y Experiencias",
+  title: "Local Guide to Orihuela Costa & Villamartín | Tips, Rules & Experiences",
   description:
-    "Descubre la Guía Local de Orihuela Costa y Villamartín creada por Pinada Sun: costumbres, gastronomía típica, ordenanzas municipales, playas con Bandera Azul y consejos para tu viaje.",
+    "Discover the Pinada Sun Local Guide to Orihuela Costa and Villamartín: local customs, typical food, municipal ordinances, Blue Flag beaches, and travel tips.",
   keywords: [
-    "guia local orihuela costa",
-    "guia turismo villamartin",
-    "que hacer en orihuela costa",
-    "consejos vacaciones orihuela costa",
-    "normas y costumbres alicante",
+    "orihuela costa local guide",
+    "villamartin tourism guide",
+    "what to do in orihuela costa",
+    "orihuela costa holiday tips",
+    "alicante rules and customs",
   ],
   alternates: {
-    canonical: "https://pinadasun.com/guia-local",
+    canonical: "https://pinadasun.com/en/guia-local",
   },
   openGraph: {
     type: "website",
-    locale: "es_ES",
-    url: "https://pinadasun.com/guia-local",
+    locale: "en_GB",
+    url: "https://pinadasun.com/en/guia-local",
     siteName: "Pinada Sun",
-    title: "Guía Local de Orihuela Costa y Villamartín | Pinada Sun",
+    title: "Local Guide to Orihuela Costa and Villamartín | Pinada Sun",
     description:
-      "Artículos y guías locales para aprovechar al máximo tu estancia en Orihuela Costa.",
+      "Articles and local guides to make the most of your stay in Orihuela Costa.",
     images: [
       {
         url: "/images/terrace-hero.webp",
         width: 1200,
         height: 630,
-        alt: "Guía Local de Orihuela Costa",
+        alt: "Orihuela Costa Local Guide",
       },
     ],
   },
@@ -45,24 +45,24 @@ export const metadata: Metadata = {
 
 const ARTICLES = [
   {
-    slug: "/guia-local/costumbres-y-normas",
-    badge: "Costumbres & Usos",
-    title: "Costumbres locales y normas prácticas en Orihuela Costa: Guía para el viajero",
-    desc: "Aprende los usos del sur de Alicante: vestimenta en comercios, pago en hostelería, tapas típicas (marineras, arroz del senyoret) y conducción en rotondas.",
+    slug: "/en/guia-local/costumbres-y-normas",
+    badge: "Customs & Habits",
+    title: "Local customs and practical rules in Orihuela Costa: A traveller's guide",
+    desc: "Learn the customs of southern Alicante: dress codes, tipping, typical tapas (marineras), and roundabout driving rules.",
     readTime: "4 min",
   },
   {
-    slug: "/guia-normativa-orihuela-costa",
-    badge: "Ordenanzas & Playas",
-    title: "Normas, playas y ordenanzas municipales en Orihuela Costa",
-    desc: "Regulación de patinetes eléctricos (VMP), horarios de descanso vecinal, horarios de socorristas y significado oficial de las banderas de baño.",
+    slug: "/en/guia-normativa-orihuela-costa",
+    badge: "Rules & Beaches",
+    title: "Rules, beaches and municipal ordinances in Orihuela Costa",
+    desc: "E-scooter (VMP) regulations, noise and resting hours, lifeguard schedules and official beach flag meanings.",
     readTime: "5 min",
   },
   {
-    slug: "/guia-local/nueva-ley-tabaco-terrazas",
-    badge: "Actualidad",
-    title: "¿Qué cambia con la nueva Ley del Tabaco en las terrazas de Orihuela Costa?",
-    desc: "Lo que debes saber para tus próximas vacaciones sobre la prohibición de fumar y vapear en bares y restaurantes, y su estado actual de vigor.",
+    slug: "/en/guia-local/nueva-ley-tabaco-terrazas",
+    badge: "News",
+    title: "What changes with the new Tobacco Law in Orihuela Costa's terraces?",
+    desc: "What you need to know for your next holiday regarding the smoking and vaping ban in bars and restaurants.",
     readTime: "3 min",
   },
 ];
@@ -70,30 +70,30 @@ const ARTICLES = [
 export default function GuiaLocalHubPage() {
   return (
     <div className="min-h-svh bg-linen text-ink">
-      <Header />
+      <Header lang="en" />
 
       {/* ═══ CABECERA DEL HUB ═══ */}
       <section className="relative bg-pine-deep text-cream pt-36 pb-20 px-5 md:px-8 overflow-hidden">
         <div className="mx-auto max-w-5xl">
           <nav className="mb-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sun-light/80">
-            <Link href="/" className="hover:text-cream transition-colors">
-              Inicio
+            <Link href="/en" className="hover:text-cream transition-colors">
+              Home
             </Link>
             <span>/</span>
-            <span className="text-cream">Guía Local</span>
+            <span className="text-cream">Local Guide</span>
           </nav>
 
           <span className="inline-flex items-center gap-2 rounded bg-sun/15 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-sun-light border border-sun/30">
             <IconShieldCheck className="h-4 w-4" />
-            Conocimiento y Consejos de Expertos Locales
+            Local Expert Knowledge & Tips
           </span>
 
           <h1 className="mt-6 font-display text-4xl font-bold tracking-tight md:text-6xl leading-tight text-cream">
-            Guía Local de Orihuela Costa
+            Orihuela Costa Local Guide
           </h1>
 
           <p className="mt-5 text-base md:text-lg leading-relaxed text-cream/80 max-w-3xl">
-            Todo lo que necesitas saber para disfrutar de una estancia perfecta en Villamartín y Orihuela Costa: normas, costumbres, playas, gastronomía y recomendaciones directas de anfitriones.
+            Everything you need to know for a perfect stay in Villamartín and Orihuela Costa: rules, customs, beaches, gastronomy and direct recommendations from hosts.
           </p>
         </div>
       </section>
@@ -131,7 +131,7 @@ export default function GuiaLocalHubPage() {
                   href={art.slug}
                   className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-ocean hover:text-ocean-light transition-colors"
                 >
-                  Leer guía completa
+                  Read full guide
                   <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
@@ -144,21 +144,21 @@ export default function GuiaLocalHubPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-1.5 text-sun-light text-xs font-semibold uppercase tracking-wider">
               <IconStar className="h-4 w-4 fill-sun text-sun" />
-              <span>Alojamiento de Calidad en Orihuela Costa</span>
+              <span>Premium Accommodation in Orihuela Costa</span>
             </div>
             <h3 className="font-display text-2xl font-bold text-cream">
               {APARTMENT.name} · {APARTMENT.neighborhood}
             </h3>
             <p className="text-xs md:text-sm text-cream/80 max-w-xl">
-              {APARTMENT.subtitle}. Reserva directa oficial sin intermediarios al mejor precio garantizado.
+              {APARTMENT.subtitle}. Official direct booking with no intermediaries and best price guaranteed.
             </p>
           </div>
 
           <Link
-            href="/#reserva"
+            href="/en#booking"
             className="inline-flex items-center justify-center gap-2 bg-sun px-6 py-3.5 text-xs md:text-sm font-semibold text-pine-deep shadow-md hover:bg-sun-light transition-all shrink-0"
           >
-            Reservar estancia
+            Book your stay
             <IconArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -169,8 +169,8 @@ export default function GuiaLocalHubPage() {
         <div className="mx-auto max-w-5xl px-5 space-y-2">
           <p>© 2026 {APARTMENT.name} · {APARTMENT.domain}</p>
           <p>
-            <Link href="/" className="text-ocean underline hover:text-ocean-light">
-              ← Volver a la página principal
+            <Link href="/en" className="text-ocean underline hover:text-ocean-light">
+              ← Back to main page
             </Link>
           </p>
         </div>

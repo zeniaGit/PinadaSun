@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/logo";
 
 const LINKS_ES = [
@@ -23,7 +24,15 @@ const LINKS_EN = [
 
 export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname() || "/";
   const links = lang === "en" ? LINKS_EN : LINKS_ES;
+
+  const pathWithoutLang = pathname.startsWith("/en") 
+    ? pathname.replace(/^\/en/, "") || "/"
+    : pathname;
+
+  const esUrl = pathWithoutLang;
+  const enUrl = pathWithoutLang === "/" ? "/en" : `/en${pathWithoutLang}`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -73,7 +82,7 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
             }`}
           >
             <a
-              href="/"
+              href={esUrl}
               className={`px-1.5 py-0.5 rounded transition-colors ${
                 lang === "es"
                   ? scrolled
@@ -86,7 +95,7 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
             </a>
             <span className="opacity-40">/</span>
             <a
-              href="/en"
+              href={enUrl}
               className={`px-1.5 py-0.5 rounded transition-colors ${
                 lang === "en"
                   ? scrolled

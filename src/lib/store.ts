@@ -417,16 +417,23 @@ export async function recordVisitorSession(input: {
       await ensureSchema();
       // Si la sesión ya existe en los últimos 30 min, actualizamos la última página
       const existing = await db
-        .select({ id: visitorSessions.id })
+        .select({ id: visitorSessions.id, page: visitorSessions.page })
         .from(visitorSessions)
         .where(eq(visitorSessions.sessionId, input.sessionId))
         .limit(1);
 
       if (existing.length > 0) {
+        const prevPage = existing[0].page || "";
+        const pagesArray = prevPage.split(",").map(p => p.trim());
+        let newPageString = prevPage;
+        if (!pagesArray.includes(input.page)) {
+          newPageString = prevPage ? prevPage + "," + input.page : input.page;
+        }
+
         await db
           .update(visitorSessions)
           .set({
-            page: input.page,
+            page: newPageString,
             updatedAt: new Date(),
           })
           .where(eq(visitorSessions.id, existing[0].id));
@@ -447,7 +454,11 @@ export async function recordVisitorSession(input: {
   const data = getLocalData();
   const existing = data.visitorSessions.find((s) => s.sessionId === input.sessionId);
   if (existing) {
-    existing.page = input.page;
+    const prevPage = existing.page || "";
+    const pagesArray = prevPage.split(",").map(p => p.trim());
+    if (!pagesArray.includes(input.page)) {
+      existing.page = prevPage ? prevPage + "," + input.page : input.page;
+    }
     existing.updatedAt = new Date();
   } else {
     const id = data.nextSessionId++;
@@ -566,7 +577,10 @@ export async function getVisitorAnalytics(limit = 150): Promise<VisitorAnalytics
     countryMap[cCode].count++;
 
     const p = s.page || "/";
-    pageMap[p] = (pageMap[p] || 0) + 1;
+    const pagesArray = p.split(",").map(x => x.trim());
+    for (const page of pagesArray) {
+      pageMap[page] = (pageMap[page] || 0) + 1;
+    }
   }
 
   const topCountries = Object.values(countryMap)
@@ -615,3 +629,49 @@ function addOneDay(iso: string): string {
   return next.toISOString().slice(0, 10);
 }
 
+export async function getUniqueIpCount(): Promise<number> {
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      const result = await db.execute(sql`SELECT COUNT(DISTINCT ip) as count FROM visitor_sessions`);
+      if (result && "rows" in result && Array.isArray(result.rows) && result.rows.length > 0) {
+        return parseInt(result.rows[0].count as string, 10) || 0;
+      }
+      if (Array.isArray(result) && result.length > 0) {
+        return parseInt((result[0] as any).count as string, 10) || 0;
+      }
+      return 0;
+    } catch (err) {
+      console.warn("DB getUniqueIpCount error, fallback to local:", err);
+    }
+  }
+
+  const data = getLocalData();
+  const uniqueIps = new Set(data.visitorSessions.map((s) => s.ip));
+  return uniqueIps.size;
+}
+
+export async function getUniqueIpCountForPage(pagePath: string): Promise<number> {
+  if (hasValidDb) {
+    try {
+      await ensureSchema();
+      const searchPattern = `%${pagePath}%`;
+      const result = await db.execute(sql`SELECT COUNT(DISTINCT ip) as count FROM visitor_sessions WHERE page LIKE ${searchPattern}`);
+      if (result && "rows" in result && Array.isArray(result.rows) && result.rows.length > 0) {
+        return parseInt(result.rows[0].count as string, 10) || 0;
+      }
+      if (Array.isArray(result) && result.length > 0) {
+        return parseInt((result[0] as any).count as string, 10) || 0;
+      }
+      return 0;
+    } catch (err) {
+      console.warn("DB getUniqueIpCountForPage error, fallback to local:", err);
+    }
+  }
+
+  const data = getLocalData();
+  const uniqueIps = new Set(
+    data.visitorSessions.filter((s) => s.page.includes(pagePath)).map((s) => s.ip)
+  );
+  return uniqueIps.size;
+}

@@ -8,6 +8,7 @@ import {
   IconStar,
 } from "@/components/icons";
 import { APARTMENT } from "@/lib/apartment";
+import { VisitCounter } from "@/components/visit-counter";
 
 export const metadata: Metadata = {
   title: "Costumbres Locales y Normas Prácticas en Orihuela Costa | Guía para el Viajero",
@@ -501,6 +502,7 @@ export default function CostumbresNormasPage() {
             </div>
           </div>
         </footer>
+        <VisitCounter pagePath="/guia-local/costumbres-y-normas" />
       </div>
     </>
   );

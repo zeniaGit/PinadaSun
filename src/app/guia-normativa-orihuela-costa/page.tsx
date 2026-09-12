@@ -10,6 +10,7 @@ import {
   IconStar,
 } from "@/components/icons";
 import { APARTMENT } from "@/lib/apartment";
+import { VisitCounter } from "@/components/visit-counter";
 
 export const metadata: Metadata = {
   title: "Guía de Ordenanzas y Normas en Orihuela Costa | Playas, Patinetes y Descanso",
@@ -423,6 +424,7 @@ export default function GuiaNormativaPage() {
             </p>
           </div>
         </footer>
+        <VisitCounter pagePath="/guia-normativa-orihuela-costa" />
       </div>
     </>
   );
