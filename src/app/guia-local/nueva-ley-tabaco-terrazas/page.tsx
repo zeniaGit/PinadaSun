@@ -201,7 +201,7 @@ export default function LeyTabacoPage() {
 
             <figure className="group relative overflow-hidden rounded-lg shadow-sm my-6">
               <img
-                src="/images/smoke-free-terrace.jpg"
+                src="/images/RUIDe6d6a9c24a414fbf89aebde7f1ef480e.jpg"
                 alt="Turistas disfrutando de una terraza libre de humos"
                 loading="lazy"
                 className="h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[400px]"
