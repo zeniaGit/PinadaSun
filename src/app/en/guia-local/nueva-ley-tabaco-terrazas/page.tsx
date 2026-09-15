@@ -34,7 +34,7 @@ export const metadata: Metadata = {
       "Discover how the new tobacco bill affects bars and restaurants in Orihuela Costa.",
     images: [
       {
-        url: "/images/terrace-hero.webp",
+        url: "/images/ley-tabaco.jpg",
         width: 1200,
         height: 630,
         alt: "Smoke-free terraces in Orihuela Costa",
@@ -119,6 +119,18 @@ export default function LeyTabacoPage() {
           <p className="text-sm md:text-base leading-relaxed text-ink-soft">
             If you are planning your next getaway or a mid-season stay in our apartments, we tell you the current status of the measure, what is going to change, and how it will impact leisure time on our coast.
           </p>
+
+          <figure className="group relative overflow-hidden rounded-lg shadow-sm my-8">
+            <img
+              src="/images/ley-tabaco.jpg"
+              alt="Smoke-free terrace on the coast"
+              loading="lazy"
+              className="h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[400px]"
+            />
+            <figcaption className="absolute bottom-4 left-4 bg-pine-deep/80 px-3.5 py-1.5 text-[12px] font-medium tracking-wide text-cream backdrop-blur-xs rounded">
+              Towards a smoke-free outdoor hospitality model.
+            </figcaption>
+          </figure>
 
           {/* Sección 1 */}
           <section className="space-y-4">

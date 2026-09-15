@@ -34,7 +34,7 @@ export const metadata: Metadata = {
       "Descubre cómo afecta el nuevo proyecto de ley del tabaco a los bares y restaurantes de Orihuela Costa.",
     images: [
       {
-        url: "/images/terrace-hero.webp",
+        url: "/images/ley-tabaco.jpg",
         width: 1200,
         height: 630,
         alt: "Terrazas libres de humo en Orihuela Costa",
@@ -120,6 +120,18 @@ export default function LeyTabacoPage() {
             Si estás planeando tu próxima escapada o estancia de media temporada en nuestros apartamentos, te contamos el estado actual de la medida, qué va a cambiar y cómo repercutirá en el ocio de nuestra costa.
           </p>
 
+          <figure className="group relative overflow-hidden rounded-lg shadow-sm my-8">
+            <img
+              src="/images/ley-tabaco.jpg"
+              alt="Terraza libre de humo en la costa"
+              loading="lazy"
+              className="h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[400px]"
+            />
+            <figcaption className="absolute bottom-4 left-4 bg-pine-deep/80 px-3.5 py-1.5 text-[12px] font-medium tracking-wide text-cream backdrop-blur-xs rounded">
+              Hacia un modelo de hostelería sin humo al aire libre.
+            </figcaption>
+          </figure>
+
           {/* Sección 1 */}
           <section className="space-y-4">
             <h2 className="font-display text-2xl font-bold text-ocean md:text-3xl">
@@ -186,6 +198,18 @@ export default function LeyTabacoPage() {
             <p className="text-sm md:text-base leading-relaxed text-ink-soft">
               Independientemente de los plazos legislativos, la tendencia en la hostelería de la Costa Blanca camina claramente hacia la creación de espacios más saludables y respetuosos. Para muchos viajeros —especialmente familias con niños o personas que prefieren ambientes libres de humos—, el auge de las terrazas 100% limpias es un atractivo muy valorado a la hora de elegir dónde comer, tomar algo o pasar las vacaciones.
             </p>
+
+            <figure className="group relative overflow-hidden rounded-lg shadow-sm my-6">
+              <img
+                src="/images/smoke-free-terrace.jpg"
+                alt="Turistas disfrutando de una terraza libre de humos"
+                loading="lazy"
+                className="h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[400px]"
+              />
+              <figcaption className="absolute bottom-4 left-4 bg-pine-deep/80 px-3.5 py-1.5 text-[12px] font-medium tracking-wide text-cream backdrop-blur-xs rounded">
+                Turismo de bienestar en ambientes saludables.
+              </figcaption>
+            </figure>
             
             <div className="bg-linen p-5 border border-line mt-4">
               <p className="text-sm leading-relaxed text-ink-soft">
