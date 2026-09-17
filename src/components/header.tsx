@@ -216,7 +216,7 @@ function MobileMenu({
                 className={`px-5 py-3.5 font-display text-[16.5px] tracking-tight border-b last:border-b-0 transition-colors ${
                   scrolled
                     ? "text-ocean font-bold border-line/40 hover:bg-ocean/5 hover:text-sun"
-                    : "text-cream font-medium border-cream/10 hover:bg-white/5 hover:text-sun"
+                    : "text-ocean font-bold border-cream/10 hover:bg-ocean/5 hover:text-sun"
                 }`}
               >
                 {l.label}
