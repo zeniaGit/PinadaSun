@@ -44,7 +44,7 @@ export function Calendar({
   onChange,
   lang = "es",
 }: {
-  unavailable: Set<string>;
+  unavailable: Map<string, string>;
   value: [string, string] | null;
   onChange: (v: [string, string] | null) => void;
   lang?: "es" | "en";
@@ -73,6 +73,7 @@ export function Calendar({
 
   const isPast = (iso: string) => iso < today;
   const isUnavail = (iso: string) => unavailable.has(iso);
+  const getSource = (iso: string) => unavailable.get(iso) || "Ocupado";
 
   function handlePick(iso: string) {
     if (isPast(iso) || isUnavail(iso)) return;
@@ -117,9 +118,9 @@ export function Calendar({
     const past = isPast(iso);
     const un = isUnavail(iso);
     const base =
-      "relative flex h-10 items-center justify-center text-[13px] transition-colors duration-150 sm:h-11";
+      "relative flex flex-col h-12 items-center justify-center text-[13px] transition-colors duration-150 sm:h-14";
     if (past) return `${base} text-ink/25`;
-    if (un) return `${base} text-ink/30`;
+    if (un) return `${base} bg-red-50 text-red-600`;
 
     if (value && (iso === value[0] || iso === value[1])) {
       return `${base} bg-ink font-semibold text-cream`;
@@ -197,9 +198,9 @@ export function Calendar({
               aria-label={iso}
               className={cellClass(iso)}
             >
-              {Number(iso.slice(8))}
+              <span className="leading-none mt-0.5">{Number(iso.slice(8))}</span>
               {isUnavail(iso) && !isPast(iso) && (
-                <span className="absolute bottom-1 h-1 w-1 rounded-full bg-clay/70" />
+                <span className="text-[8px] font-bold leading-none mt-0.5 uppercase tracking-wider opacity-80">{getSource(iso)}</span>
               )}
             </button>
           ),
@@ -218,10 +219,7 @@ export function Calendar({
           <i className="h-3 w-3 bg-ink" /> Selección
         </span>
         <span className="inline-flex items-center gap-2">
-          <i className="relative h-3 w-3 border border-line bg-cream">
-            <i className="absolute bottom-[2px] left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-clay/70" />
-          </i>
-          Ocupado
+          <i className="h-3 w-3 bg-red-50 border border-red-200" /> Ocupado
         </span>
       </div>
     </div>

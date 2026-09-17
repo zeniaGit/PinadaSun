@@ -26,7 +26,7 @@ const EMPTY_FORM: FormState = {
 };
 
 export function BookingWidget({ lang = "es" }: { lang?: "es" | "en" }) {
-  const [unavailable, setUnavailable] = useState<Set<string>>(new Set());
+  const [unavailable, setUnavailable] = useState<Map<string, string>>(new Map());
   const [loadingCal, setLoadingCal] = useState(true);
   const [value, setValue] = useState<[string, string] | null>(null);
   const [hint, setHint] = useState<string | null>(null);
@@ -52,8 +52,10 @@ export function BookingWidget({ lang = "es" }: { lang?: "es" | "en" }) {
     try {
       const r = await fetch("/api/calendar", { cache: "no-store" });
       if (!r.ok) throw new Error();
-      const data = (await r.json()) as { unavailable: string[] };
-      setUnavailable(new Set(data.unavailable));
+      const data = (await r.json()) as { unavailable: { date: string; source: string }[] };
+      const map = new Map<string, string>();
+      data.unavailable.forEach(u => map.set(u.date, u.source));
+      setUnavailable(map);
     } catch {
       setHint("No se pudo cargar la disponibilidad. Recarga la página.");
     } finally {

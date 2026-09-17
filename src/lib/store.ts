@@ -114,7 +114,100 @@ function saveLocalData(data: LocalData) {
   } catch {}
 }
 
-export async function getUnavailableDates(today: string, cap: string): Promise<string[]> {
+const ICAL_SOURCES = [
+  { name: "Airbnb", url: "https://www.airbnb.es/calendar/ical/1729850238063591911.ics?t=165372d889384dd58e382af1fafecf26" },
+  { name: "Vrbo", url: "https://www.vrbo.com/icalendar/1097c9a3ec9d4cd797d20ba08e1d1e28.ics?nonTentative" }
+];
+
+export interface UnavailableDate {
+  date: string;
+  source: string;
+}
+
+async function fetchExternalIcalDates(): Promise<UnavailableDate[]> {
+  const dates: UnavailableDate[] = [];
+  
+  for (const source of ICAL_SOURCES) {
+    try {
+      const res = await fetch(source.url, { next: { revalidate: 900 } });
+      if (!res.ok) continue;
+      const text = await res.text();
+      const events = text.split("BEGIN:VEVENT");
+      events.shift();
+      
+      for (const event of events) {
+        const startMatch = event.match(/DTSTART(?:;VALUE=DATE)?:(\d{4})(\d{2})(\d{2})/);
+        const endMatch = event.match(/DTEND(?:;VALUE=DATE)?:(\d{4})(\d{2})(\d{2})/);
+        if (startMatch && endMatch) {
+          const start = `${startMatch[1]}-${startMatch[2]}-${startMatch[3]}`;
+          const end = `${endMatch[1]}-${endMatch[2]}-${endMatch[3]}`;
+          
+          let curr = start;
+          while (curr < end) {
+            dates.push({ date: curr, source: source.name });
+            curr = addOneDay(curr);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching iCal for ${source.name}:`, error);
+    }
+  }
+  return dates;
+}
+
+async function fetchNasBlockedDates(): Promise<UnavailableDate[]> {
+  const dates: UnavailableDate[] = [];
+  const today = new Date();
+  let y = today.getFullYear();
+  let m = today.getMonth() + 1;
+  const fetches = [];
+  
+  for (let i = 0; i < 13; i++) {
+    const url = `https://calendario.nas-lazenia.synology.me/api/disponibilidad?year=${y}&month=${m}`;
+    fetches.push(
+      fetch(url, { next: { revalidate: 900 } })
+        .then(res => res.json())
+        .catch(() => null)
+    );
+    m++;
+    if (m > 12) {
+      m = 1;
+      y++;
+    }
+  }
+  
+  try {
+    const results = await Promise.all(fetches);
+    for (const data of results) {
+      if (data && data.blocked && Array.isArray(data.blocked)) {
+        for (const b of data.blocked) {
+          if (b.source === "Privado" || b.source === "Manual") {
+            dates.push({ date: b.date, source: "Privado" });
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching NAS blocked dates:", err);
+  }
+  return dates;
+}
+
+export async function getUnavailableDates(today: string, cap: string): Promise<UnavailableDate[]> {
+  const [externalBlocked, nasBlocked] = await Promise.all([
+    fetchExternalIcalDates(),
+    fetchNasBlockedDates()
+  ]);
+  const dateMap = new Map<string, string>();
+  
+  for (const b of externalBlocked) {
+    dateMap.set(b.date, b.source);
+  }
+  for (const b of nasBlocked) {
+    dateMap.set(b.date, b.source);
+  }
+
   if (hasValidDb) {
     try {
       await ensureSchema();
@@ -126,16 +219,18 @@ export async function getUnavailableDates(today: string, cap: string): Promise<s
         db.select({ date: blockedDates.date }).from(blockedDates),
       ]);
 
-      const set = new Set<string>();
       for (const b of active) {
         for (let d = b.checkIn; d < b.checkOut && d <= cap; d = addOneDay(d)) {
-          if (d >= today) set.add(d);
+          if (d >= today) dateMap.set(d, "Ocupado");
         }
       }
       for (const b of blocked) {
-        if (b.date >= today && b.date <= cap) set.add(b.date);
+        if (b.date >= today && b.date <= cap) dateMap.set(b.date, "Ocupado");
       }
-      return [...set].sort();
+      
+      return Array.from(dateMap.entries())
+        .map(([date, source]) => ({ date, source }))
+        .sort((a, b) => a.date.localeCompare(b.date));
     } catch (err) {
       console.warn("DB getUnavailableDates error, using local fallback:", err);
     }
@@ -146,19 +241,33 @@ export async function getUnavailableDates(today: string, cap: string): Promise<s
   const active = data.bookings.filter(
     (b) => b.status === "pendiente" || b.status === "confirmada",
   );
-  const set = new Set<string>();
+  
   for (const b of active) {
     for (let d = b.checkIn; d < b.checkOut && d <= cap; d = addOneDay(d)) {
-      if (d >= today) set.add(d);
+      if (d >= today) dateMap.set(d, "Ocupado");
     }
   }
   for (const b of data.blocked) {
-    if (b.date >= today && b.date <= cap) set.add(b.date);
+    if (b.date >= today && b.date <= cap) dateMap.set(b.date, "Ocupado");
   }
-  return [...set].sort();
+  
+  return Array.from(dateMap.entries())
+    .map(([date, source]) => ({ date, source }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export async function checkBookingClash(checkIn: string, checkOut: string): Promise<boolean> {
+  const [externalBlocked, nasBlocked] = await Promise.all([
+    fetchExternalIcalDates(),
+    fetchNasBlockedDates()
+  ]);
+  let curr = checkIn;
+  while (curr < checkOut) {
+    if (externalBlocked.some(b => b.date === curr)) return true;
+    if (nasBlocked.some(b => b.date === curr)) return true;
+    curr = addOneDay(curr);
+  }
+
   if (hasValidDb) {
     try {
       const clash = await db
