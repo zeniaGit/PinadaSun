@@ -470,10 +470,63 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* ── MAPA INTERACTIVO CON MARCADOR DE CASA ── */}
+        {/* ═══ MAPA INTERACTIVO CON MARCADOR DE CASA ── */}
         <Reveal delay={250} className="mt-14">
           <InteractiveMap lang="es" />
         </Reveal>
+      </section>
+
+      {/* ═══ SOBRE NOSOTROS (ANFITRIONES) ═══ */}
+      <section id="nosotros" className="bg-linen py-24 md:py-32">
+        <div className="mx-auto max-w-4xl px-5 md:px-8">
+          <div className="mb-12 text-center">
+            <div className="flex justify-center">
+              <SectionLabel color="pine">Tus Anfitriones</SectionLabel>
+            </div>
+            <Reveal>
+              <h2 className="font-display text-4xl tracking-tight md:text-5xl text-ink">
+                Hola, somos Raquel y Jose Miguel
+              </h2>
+            </Reveal>
+          </div>
+
+          <Reveal delay={100}>
+            <figure className="group relative mx-auto w-full max-w-2xl overflow-hidden shadow-md rounded-xl">
+              <img
+                src="/images/nosotros.jpeg"
+                alt="Raquel y Jose Miguel, anfitriones de Pinada Sun"
+                loading="lazy"
+                className="w-full object-cover aspect-[4/3] md:aspect-[16/9] transition-transform duration-700 group-hover:scale-105"
+              />
+            </figure>
+          </Reveal>
+
+          <div className="mt-12 mx-auto max-w-2xl">
+            <Reveal delay={120}>
+              <p className="text-[16px] leading-relaxed text-ink-soft">
+                Gestionamos nuestra casa directamente porque creemos que la cercanía y una hospitalidad real marcan la diferencia. Raquel es filóloga inglesa y estudiante de nivel superior de alemán (EOI), por lo que se comunicará contigo fluidamente en español, inglés o alemán.
+              </p>
+              <p className="mt-4 text-[16px] leading-relaxed text-ink-soft">
+                Por su parte, Jose Miguel comenzó su trayectoria en la gestión turística en 2017 en Murcia y también habla un inglés fluido. A día de hoy, Pinada Sun es su proyecto más reciente, un apartamento acondicionado con todo lujo de detalles.
+              </p>
+              <p className="mt-4 text-[16px] leading-relaxed text-ink-soft">
+                Juntos formamos un gran equipo. Estaremos a tu entera disposición para recomendarte la zona y seremos tu principal punto de apoyo para resolver cualquier situación o imprevisto que pueda surgir durante tu estancia.
+              </p>
+            </Reveal>
+
+            <Reveal delay={200}>
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 border-t border-line pt-8">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-pine/10 text-pine shrink-0">
+                  <IconStar className="h-5 w-5" />
+                </div>
+                <div className="text-center sm:text-left">
+                  <p className="text-[14px] font-semibold text-ink">Hospitalidad excepcional</p>
+                  <p className="text-[13px] text-ink-soft">Trato directo y personal garantizado</p>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
       </section>
 
       {/* ═══ OPINIONES ═══ */}
@@ -508,6 +561,21 @@ export default async function Home() {
               </blockquote>
             </Reveal>
           ))}
+        </div>
+
+        <div className="mt-16 flex justify-center">
+          <Reveal delay={200}>
+            <a
+              href="https://airbnb.es/h/pinadagolf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-3 rounded-full border border-line bg-cream px-7 py-3.5 text-[14px] font-medium text-ink shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#FF5A5F] hover:shadow-md"
+            >
+              <LogoAirbnb className="h-5 w-auto text-[#FF5A5F]" />
+              <span>Ver las {APARTMENT.reviewCount} valoraciones en Airbnb</span>
+              <IconExternalLink className="h-4 w-4 text-ink-soft transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#FF5A5F]" />
+            </a>
+          </Reveal>
         </div>
       </section>
 

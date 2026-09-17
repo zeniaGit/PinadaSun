@@ -65,6 +65,13 @@ const ARTICLES = [
     desc: "Lo que debes saber para tus próximas vacaciones sobre la prohibición de fumar y vapear en bares y restaurantes, y su estado actual de vigor.",
     readTime: "3 min",
   },
+  {
+    slug: "/guia-local/normas-rotondas-espana",
+    badge: "Seguridad Vial",
+    title: "Cómo circular correctamente por las rotondas en España",
+    desc: "Descubre por qué hay tantos accidentes en las rotondas y la norma de oro de la DGT: cómo ceder el paso y salir siempre por el carril exterior.",
+    readTime: "3 min",
+  },
 ];
 
 export default function GuiaLocalHubPage() {

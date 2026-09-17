@@ -18,26 +18,14 @@ export function LogoAirbnb({ className = "h-7", ...props }: SVGProps<SVGSVGEleme
       {/* Text "airbnb" */}
       <text
         x="36"
-        y="18"
+        y="21"
         fontFamily="system-ui, -apple-system, sans-serif"
-        fontSize="14"
+        fontSize="17"
         fontWeight="800"
         letterSpacing="-0.5px"
         fill="currentColor"
       >
         airbnb
-      </text>
-      {/* Subtext "PARTNER" */}
-      <text
-        x="36"
-        y="27"
-        fontFamily="system-ui, -apple-system, sans-serif"
-        fontSize="7.5"
-        fontWeight="700"
-        letterSpacing="1.8px"
-        fill="#FF5A5F"
-      >
-        PARTNER
       </text>
     </svg>
   );

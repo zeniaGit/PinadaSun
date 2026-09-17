@@ -43,14 +43,16 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 backdrop-blur-md ${
         scrolled
-          ? "border-b border-line bg-linen/95 backdrop-blur-md py-3.5 shadow-sm"
-          : "border-b border-transparent bg-transparent py-5"
+          ? "border-b border-line/50 bg-linen/85 py-3.5 shadow-sm"
+          : "border-b border-white/10 bg-white/30 py-5"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 md:px-8">
-        <a
+        {/* Lado izquierdo (Logo) - Ancho fijo en LG para centrar la navegación */}
+        <div className="flex items-center lg:w-[240px] lg:shrink-0">
+          <a
           href={lang === "en" ? "/en#top" : "/#top"}
           className="transition-transform duration-300 hover:opacity-90 active:scale-98"
           aria-label="Pinada Sun - Home"
@@ -58,13 +60,16 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
           <Logo isLight={!scrolled} />
         </a>
 
-        <nav className="hidden items-center gap-7 lg:flex">
+        </div>
+
+        {/* Navegación central (flex-1 para estar perfectamente centrada y espaciada) */}
+        <nav className="hidden flex-1 items-center justify-center gap-6 xl:gap-9 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className={`text-[13.5px] font-medium tracking-wide transition-all hover:text-sun ${
-                scrolled ? "text-ink-soft" : "text-cream/90"
+              className={`font-display text-[14.5px] font-medium tracking-wide transition-all hover:text-sun hover:-translate-y-[1px] ${
+                scrolled ? "text-ocean/90" : "text-cream"
               }`}
             >
               {l.label}
@@ -72,13 +77,14 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Lado derecho (Botones) - Ancho fijo en LG para compensar */}
+        <div className="flex items-center justify-end gap-2 sm:gap-3 lg:w-[240px] lg:shrink-0">
           {/* Selector de idioma */}
           <div
             className={`flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold tracking-wider ${
               scrolled
                 ? "border-line bg-linen text-ink-soft"
-                : "border-cream/25 bg-black/20 text-cream/90"
+                : "border-cream/25 bg-black/10 text-cream"
             }`}
           >
             <a
@@ -197,7 +203,7 @@ function MobileMenu({
           className={`mx-4 mt-1 rounded-2xl shadow-xl overflow-hidden border ${
             scrolled
               ? "bg-linen/98 border-line backdrop-blur-md"
-              : "bg-pine-deep/95 border-cream/10 backdrop-blur-md"
+              : "bg-white/95 border-line/50 backdrop-blur-md"
           }`}
         >
           <nav className="flex flex-col py-2">
@@ -207,10 +213,10 @@ function MobileMenu({
                 href={l.href}
                 onClick={() => setOpen(false)}
                 style={{ animationDelay: `${i * 40}ms` }}
-                className={`px-5 py-3.5 text-sm font-medium tracking-wide border-b last:border-b-0 transition-colors ${
+                className={`px-5 py-3.5 font-display text-[16.5px] tracking-tight border-b last:border-b-0 transition-colors ${
                   scrolled
-                    ? "text-ink-soft border-line hover:bg-ocean/5 hover:text-ocean"
-                    : "text-cream/85 border-cream/10 hover:bg-white/5 hover:text-sun"
+                    ? "text-ocean font-bold border-line/40 hover:bg-ocean/5 hover:text-sun"
+                    : "text-cream font-medium border-cream/10 hover:bg-white/5 hover:text-sun"
                 }`}
               >
                 {l.label}

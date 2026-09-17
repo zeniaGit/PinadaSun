@@ -30,7 +30,7 @@ export const APARTMENT = {
   lng: -0.770276,
   googleMapsUrl: "https://maps.app.goo.gl/FZQWPfZ2VHLoDP2u5",
   rating: 5.0,
-  reviewCount: 18,
+  reviewCount: 2,
   registration: "Exento (alquiler de temporada - C. Valenciana)",
 } as const;
 
@@ -295,24 +295,15 @@ export type Review = {
 
 export const REVIEWS: Review[] = [
   {
-    quote:
-      "Una estancia de diez. El apartamento transmite calidad desde que entras: la terraza privada con barbacoa es sensacional y la piscina una gozada. La ubicación junto a los campos de golf y Zenia Boulevard es perfecta.",
-    author: "Carlos & Sophie",
-    from: "Bruselas · Estancia de 2 semanas",
+    quote: "Pasamos una estancia absolutamente maravillosa en esta magnífica casa de Alicante. Todo estaba perfecto; la casa es preciosa, muy limpia, acogedora y está decorada con mucho gusto. Nos sentimos como en casa desde nuestra llegada. Muchas gracias a nuestro anfitrión por su excepcional bienvenida, su amabilidad y su bondad. Son personas maravillosas. También guardaremos un recuerdo muy bonito de su adorable niña. Recomendaría encarecidamente este alojamiento, se puede reservar con los ojos cerrados. Hemos creado recuerdos maravillosos en familia y sin duda volveremos.",
+    author: "Radia",
+    from: "Francia · Agosto de 2026",
     rating: 5,
   },
   {
-    quote:
-      "Reformado con un gusto exquisito y materiales de gran calidad. El plato de ducha de 150 cm, la cocina y los colchones son de nivel superior. La atención de los anfitriones fue impecable y de total confianza.",
-    author: "David M.",
-    from: "Madrid · Huésped verificado",
-    rating: 5,
-  },
-  {
-    quote:
-      "Fantástica experiencia en Pinada Sun. Muy cerca de las mejores calas de Orihuela Costa y de La Zenia. Urbanización tranquila, sol todo el día y una terraza que invita a no salir de casa.",
-    author: "Elin & Lars",
-    from: "Gotemburgo · Huéspedes verificados",
+    quote: "Alojamiento muy bonito, limpio y tranquilo con mucho espacio, y un anfitrión adorable, realmente muy disponible y de una amabilidad extraordinaria. Realmente lo recomiendo.",
+    author: "Coralie",
+    from: "Francia · Agosto de 2026",
     rating: 5,
   },
 ];
@@ -424,24 +415,15 @@ export const PLACES_EN: Place[] = [
 
 export const REVIEWS_EN: Review[] = [
   {
-    quote:
-      "A flawless 10/10 stay. The apartment radiates quality from the moment you step inside: the private terrace with BBQ is fantastic, and the pool was lovely. Perfect location next to golf courses and Zenia Boulevard.",
-    author: "Carlos & Sophie",
-    from: "Brussels · 2-Week Holiday",
+    quote: "[Paste the text of the first real review here]",
+    author: "[Author 1]",
+    from: "[Origin 1]",
     rating: 5,
   },
   {
-    quote:
-      "Refurbished with exquisite taste and premium materials. The 150 cm walk-in shower, kitchen, and mattresses are top-tier. The hosts' communication was prompt, welcoming, and completely trustworthy.",
-    author: "David M.",
-    from: "Madrid · Verified Guest",
-    rating: 5,
-  },
-  {
-    quote:
-      "A wonderful experience at Pinada Sun. Very close to the best coves in Orihuela Costa and La Zenia. Quiet neighborhood, sunshine all day, and a terrace you never want to leave.",
-    author: "Elin & Lars",
-    from: "Gothenburg · Verified Guests",
+    quote: "[Paste the text of the second real review here]",
+    author: "[Author 2]",
+    from: "[Origin 2]",
     rating: 5,
   },
 ];
