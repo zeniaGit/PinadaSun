@@ -455,17 +455,43 @@ export default async function Home() {
             </div>
 
             <Reveal delay={200}>
-              <figure className="group relative mt-10 overflow-hidden rounded-lg">
-                <img
-                  src={IMAGES.cathedral}
-                  alt="Terraza soleada y entorno residencial"
-                  loading="lazy"
-                  className="h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[280px]"
-                />
-                <figcaption className="absolute bottom-4 left-4 bg-pine-deep/80 px-3.5 py-1.5 text-[12px] font-medium tracking-wide text-cream backdrop-blur-xs">
-                  Porche exterior y barbacoa
-                </figcaption>
-              </figure>
+              <div className="mt-10 grid grid-cols-2 gap-4">
+                <figure className="group relative overflow-hidden rounded-lg">
+                  <img
+                    src="/images/cartagena-historica.jpg"
+                    alt="Teatro Romano de Cartagena"
+                    loading="lazy"
+                    className="h-[180px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[220px]"
+                  />
+                  <figcaption className="absolute bottom-3 left-3 bg-pine-deep/80 px-2.5 py-1 text-[11px] font-medium tracking-wide text-cream backdrop-blur-xs">
+                    Cartagena
+                  </figcaption>
+                </figure>
+                <div className="grid grid-rows-2 gap-4">
+                  <figure className="group relative overflow-hidden rounded-lg">
+                    <img
+                      src="/images/san-pedro-salinas.jpg"
+                      alt="Salinas de San Pedro del Pinatar"
+                      loading="lazy"
+                      className="h-[82px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[102px]"
+                    />
+                    <figcaption className="absolute bottom-2 left-2 bg-pine-deep/80 px-2 py-0.5 text-[10px] font-medium text-cream backdrop-blur-xs">
+                      Las Salinas
+                    </figcaption>
+                  </figure>
+                  <figure className="group relative overflow-hidden rounded-lg">
+                    <img
+                      src="/images/minigolf-greenland.jpg"
+                      alt="Minigolf Greenland"
+                      loading="lazy"
+                      className="h-[82px] w-full object-cover transition-transform duration-700 group-hover:scale-105 md:h-[102px]"
+                    />
+                    <figcaption className="absolute bottom-2 left-2 bg-pine-deep/80 px-2 py-0.5 text-[10px] font-medium text-cream backdrop-blur-xs">
+                      Minigolf
+                    </figcaption>
+                  </figure>
+                </div>
+              </div>
             </Reveal>
           </div>
         </div>

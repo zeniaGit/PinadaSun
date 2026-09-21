@@ -133,6 +133,24 @@ export const GALLERY: GalleryItem[] = [
     caption: "Solarium y terraza exterior",
     room: "Exterior",
   },
+  {
+    src: "/images/cartagena-historica.jpg",
+    alt: "Teatro romano y arquitectura histórica de la ciudad de Cartagena, a 30 minutos de Pinada Sun",
+    caption: "Ciudad Histórica de Cartagena",
+    room: "Entorno",
+  },
+  {
+    src: "/images/san-pedro-salinas.jpg",
+    alt: "Reserva natural de las Salinas de San Pedro del Pinatar y el Mar Menor, a 15 minutos",
+    caption: "Salinas de San Pedro",
+    room: "Entorno",
+  },
+  {
+    src: "/images/minigolf-greenland.jpg",
+    alt: "Minigolf Greenland, ocio familiar con cabañas balinesas a 10 minutos a pie",
+    caption: "Minigolf Greenland",
+    room: "Entorno",
+  },
 ];
 
 export const DETAIL_PHOTOS: GalleryItem[] = [
@@ -284,6 +302,24 @@ export const PLACES: Place[] = [
     time: "40-45 min",
     desc: "Conexión directa y rápida por autovía con Alicante-Elche (ALC) y Corvera (RMU)",
   },
+  {
+    name: "Ciudad Histórica de Cartagena",
+    distance: "35 km",
+    time: "30 min en coche",
+    desc: "Ideal para turismo cultural, explorar su imponente teatro romano y disfrutar de su gastronomía",
+  },
+  {
+    name: "San Pedro del Pinatar & Salinas",
+    distance: "18 km",
+    time: "15 min en coche",
+    desc: "Reserva natural protegida, lodos curativos del Mar Menor y avistamiento de flamencos",
+  },
+  {
+    name: "Minigolf Greenland",
+    distance: "800 m",
+    time: "10 min a pie",
+    desc: "Ocio familiar en uno de los mejores minigolfs de la zona, rodeado de espectaculares cabañas balinesas",
+  },
 ];
 
 export type Review = {
@@ -411,6 +447,24 @@ export const PLACES_EN: Place[] = [
     time: "40-45 min",
     desc: "Fast and easy motorway connection to Alicante-Elche (ALC) and Murcia-Corvera (RMU)",
   },
+  {
+    name: "Historic City of Cartagena",
+    distance: "35 km",
+    time: "30 min drive",
+    desc: "Ideal for cultural tourism, exploring its magnificent Roman theater and exquisite gastronomy",
+  },
+  {
+    name: "San Pedro del Pinatar & Salinas",
+    distance: "18 km",
+    time: "15 min drive",
+    desc: "Protected nature reserve, therapeutic mud baths of the Mar Menor, and flamingo spotting",
+  },
+  {
+    name: "Greenland Minigolf",
+    distance: "800 m",
+    time: "10 min walk",
+    desc: "Family fun at one of the area's best minigolf courses, featuring beautiful Balinese cabanas",
+  },
 ];
 
 export const REVIEWS_EN: Review[] = [
@@ -470,6 +524,30 @@ export const GALLERY_EN: GalleryItem[] = [
     alt: "Sunny private terrace with optimal year-round orientation",
     caption: "Solarium & sun terrace",
     room: "Outdoor",
+  },
+  {
+    src: "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/9dbec5f7-6799-4c1d-8422-b5e1b6de9038.jpeg?im_w=1200",
+    alt: "Detalle de plantas decorativas y estilo mediterráneo",
+    caption: "Atmósfera relajante",
+    room: "Exterior",
+  },
+  {
+    src: "/images/cartagena-historica.jpg",
+    alt: "Roman theater and historic architecture of Cartagena, 30 minutes from Pinada Sun",
+    caption: "Historic City of Cartagena",
+    room: "Surroundings",
+  },
+  {
+    src: "/images/san-pedro-salinas.jpg",
+    alt: "Nature reserve of Las Salinas in San Pedro del Pinatar and Mar Menor, 15 minutes away",
+    caption: "Las Salinas Nature Reserve",
+    room: "Surroundings",
+  },
+  {
+    src: "/images/minigolf-greenland.jpg",
+    alt: "Greenland Minigolf, family fun with Balinese cabanas 10 minutes walk away",
+    caption: "Greenland Minigolf",
+    room: "Surroundings",
   },
 ];
 
