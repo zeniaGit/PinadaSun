@@ -200,8 +200,8 @@ export const AMENITIES: Amenity[] = [
   },
   {
     icon: "snow",
-    title: "Climatización Inverter",
-    desc: "Aire acondicionado frío/calor de bajo ruido y ventiladores de techo.",
+    title: "Climatizado por conductos Daikin",
+    desc: "Aire acondicionado frío/calor de la marca Daikin para un confort óptimo en este apartamento soleado con orientación sur.",
   },
   {
     icon: "wifi",
@@ -509,9 +509,9 @@ export const DETAIL_PHOTOS_EN: GalleryItem[] = [
 export const MARQUEE_ITEMS = [
   "Pinada Sun",
   "pinadasun.com",
-  "Orihuela Costa · Alicante",
+  "Apartamento en Orihuela Costa",
   "75 m² · 2 dormitorios",
-  "Gran terraza privada con barbacoa",
+  "Gran terraza con barbacoa",
   "Piscina comunitaria",
   "Calidades de alta gama",
   "Reserva directa sin comisiones",

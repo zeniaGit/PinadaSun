@@ -117,8 +117,8 @@ export default async function Home() {
             <Reveal delay={900}>
               <p className="hero-text-shadow tnum max-w-lg text-[15.5px] font-medium leading-relaxed text-cream/95">
                 {APARTMENT.bedrooms} dormitorios confort · hasta {APARTMENT.maxGuests}{" "}
-                huéspedes · {APARTMENT.surface} m² · Planta baja con gran terraza privada,
-                barbacoa y piscina comunitaria.
+                huéspedes · {APARTMENT.surface} m² · Planta baja con orientación sur y gran terraza privada.
+                Un apartamento soleado en Orihuela Costa con piscina comunitaria, barbacoa y climatizado por conductos Daikin.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
                 <a
@@ -197,8 +197,8 @@ export default async function Home() {
             <SectionLabel color="gold">Pinada Sun · Estancia Exclusiva</SectionLabel>
             <Reveal>
               <p className="font-display text-4xl leading-[1.1] tracking-tight md:text-6xl text-ink">
-                Un refugio luminoso donde el confort lo es todo:{" "}
-                <span className="text-pine">gran terraza con barbacoa</span>, piscina y la tranquilidad de Orihuela Costa a pasos de{" "}
+                Un refugio luminoso donde el confort lo es todo en tu apartamento en Orihuela Costa:{" "}
+                <span className="text-pine">gran terraza con barbacoa</span>, piscina comunitaria y la tranquilidad de la zona a pasos de{" "}
                 <em className="text-clay italic">Zenia Boulevard y las calas</em>.
               </p>
             </Reveal>
@@ -206,7 +206,7 @@ export default async function Home() {
           <div className="flex flex-col justify-end gap-8 md:col-span-5 md:pl-8">
             <Reveal delay={150}>
               <p className="text-[16px] leading-relaxed text-ink-soft">
-                Diseñado para quienes buscan una experiencia superior a un alquiler convencional. En Pinada Sun cuidamos cada detalle: descanso garantizado en camas de confort premium, climatización eficiente, cocina completamente equipada y una terraza privada donde el sol y las sobremesas son los protagonistas.
+                Diseñado para quienes buscan una experiencia superior a un alquiler convencional. En Pinada Sun cuidamos cada detalle: descanso garantizado en camas de confort premium, apartamento soleado con orientación sur, espacio climatizado por conductos de la marca Daikin, cocina completamente equipada y una terraza privada donde las sobremesas son las protagonistas.
               </p>
             </Reveal>
             <div className="grid grid-cols-4 gap-4 border-t border-line pt-6">
@@ -281,7 +281,7 @@ export default async function Home() {
             </Reveal>
             <Reveal delay={120}>
               <p className="mt-6 max-w-md text-[16px] leading-relaxed text-ink-soft">
-                Desde la terraza con barbacoa hasta la ducha XL de 150 cm y la climatización integral, cada estancia combina diseño contemporáneo y funcionalidad absoluta:
+                Desde la terraza con barbacoa hasta la ducha XL de 150 cm y al estar climatizado por conductos de la marca Daikin, cada estancia de este soleado apartamento con orientación sur combina diseño contemporáneo y funcionalidad absoluta:
               </p>
             </Reveal>
 
@@ -408,14 +408,14 @@ export default async function Home() {
             </p>
             <Reveal>
               <h2 className="font-display text-4xl leading-tight tracking-tight md:text-5xl">
-                Orihuela Costa.
+                Tu apartamento en Orihuela Costa.
                 <br />
                 Golf, calas de ensueño y sol.
               </h2>
             </Reveal>
             <Reveal delay={150}>
               <p className="mt-5 text-[15px] leading-relaxed text-cream/80">
-                Situado en el tranquilo residencial de Villamartín, a pocos minutos de las mejores playas con bandera azul de la Costa Blanca y frente a campos de golf de renombre internacional.
+                Un apartamento en Orihuela Costa con piscina comunitaria y barbacoa, situado en el tranquilo residencial de Villamartín. Un entorno privilegiado a pocos minutos de las mejores playas con bandera azul de la Costa Blanca y frente a campos de golf de renombre.
               </p>
             </Reveal>
             <Reveal delay={200}>

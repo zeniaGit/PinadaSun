@@ -28,12 +28,14 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pinadasun.com"),
-  title: "Pinada Sun — Apartamento Exclusivo en Orihuela Costa | Terraza & Piscina",
+  title: "Pinada Sun — Apartamento en Orihuela Costa con piscina comunitaria y barbacoa",
   description:
-    "Apartamento vacacional de alta gama con gran terraza privada, piscina comunitaria y barbacoa en Villamartín, Orihuela Costa. 2 dormitorios, confort premium y a 5 min de Zenia Boulevard.",
+    "Apartamento soleado en Orihuela Costa con piscina comunitaria, barbacoa y orientación sur. Vacacional de alta gama con terraza privada en Villamartín, climatizado por conductos Daikin y a 5 min de Zenia Boulevard.",
   keywords: [
     "Pinada Sun",
     "pinadasun.com",
+    "apartamento en Orihuela Costa",
+    "apartamento en Orihuela Costa con piscina comunitaria y barbacoa",
     "apartamento turistico orihuela costa",
     "alquiler vacaciones villamartin",
     "apartamento con terraza y barbacoa alicante",
