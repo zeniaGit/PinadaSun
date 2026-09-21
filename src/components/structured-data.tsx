@@ -7,10 +7,12 @@ export function StructuredData() {
       {
         "@type": ["VacationRental", "LodgingBusiness", "LocalBusiness"],
         "@id": "https://pinadasun.com/#lodging",
+        identifier: "PinadaSun-01",
         name: APARTMENT.name,
+        additionalType: "http://www.productontology.org/id/Vacation_rental",
         logo: "https://pinadasun.com/images/logopinadasun.webp",
         description:
-          "Vivienda vacacional de alta gama con gran terraza privada, piscina comunitaria y barbacoa en Villamartín, Orihuela Costa. 2 dormitorios, confort premium y a 5 min de Zenia Boulevard.",
+          "Exclusivo apartamento en Orihuela Costa con terraza, barbacoa y piscina. 2 dormitorios a 5 min de Zenia Boulevard.",
         url: "https://pinadasun.com",
         telephone: APARTMENT.phone,
         email: APARTMENT.email,
@@ -25,6 +27,24 @@ export function StructuredData() {
         image: [
           "https://pinadasun.com/images/terrace-hero.webp",
           "https://pinadasun.com/images/playa-v2.webp",
+          "https://pinadasun.com/images/cuadros-v2.webp",
+          "https://pinadasun.com/images/lampara-v2.webp",
+          "https://pinadasun.com/images/clima-v2.webp",
+          "https://pinadasun.com/images/swimming-pool.jpg",
+          "https://pinadasun.com/images/nosotros.jpeg",
+          "https://pinadasun.com/images/logopinadasun.webp",
+        ],
+        containsPlace: [
+          {
+            "@type": "Apartment",
+            "name": "Apartamento completo Pinada Sun",
+            "numberOfRooms": APARTMENT.bedrooms,
+            "occupancy": {
+              "@type": "QuantitativeValue",
+              "minValue": 1,
+              "maxValue": APARTMENT.maxGuests
+            }
+          }
         ],
         address: {
           "@type": "PostalAddress",

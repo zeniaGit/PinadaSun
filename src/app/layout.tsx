@@ -28,9 +28,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pinadasun.com"),
-  title: "Pinada Sun — Apartamento en Orihuela Costa con piscina comunitaria y barbacoa",
+  title: "Apartamento en Orihuela Costa con Piscina y Barbacoa | Pinada Sun",
   description:
-    "Apartamento soleado en Orihuela Costa con piscina comunitaria, barbacoa y orientación sur. Vacacional de alta gama con terraza privada en Villamartín, climatizado por conductos Daikin y a 5 min de Zenia Boulevard.",
+    "Exclusivo apartamento en Orihuela Costa con terraza, barbacoa y piscina. 2 dormitorios a 5 min de Zenia Boulevard.",
   keywords: [
     "Pinada Sun",
     "pinadasun.com",
@@ -69,9 +69,9 @@ export const metadata: Metadata = {
     locale: "es_ES",
     url: "https://pinadasun.com",
     siteName: "Pinada Sun",
-    title: "Pinada Sun — Apartamento Exclusivo en Orihuela Costa",
+    title: "Apartamento en Orihuela Costa con Piscina y Barbacoa | Pinada Sun",
     description:
-      "Vivienda vacacional de alta gama: gran terraza privada con barbacoa, piscina y calidades excepcionales a 5 min de Zenia Boulevard.",
+      "Exclusivo apartamento en Orihuela Costa con terraza, barbacoa y piscina. 2 dormitorios a 5 min de Zenia Boulevard.",
     images: [
       {
         url: "/images/terrace-hero.webp",
@@ -83,9 +83,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pinada Sun — Apartamento Exclusivo en Orihuela Costa",
+    title: "Apartamento en Orihuela Costa con Piscina y Barbacoa | Pinada Sun",
     description:
-      "Terraza privada, piscina comunitaria, barbacoa y calidades premium en Villamartín.",
+      "Exclusivo apartamento en Orihuela Costa con terraza, barbacoa y piscina. 2 dormitorios a 5 min de Zenia Boulevard.",
     images: ["/images/terrace-hero.webp"],
   },
   robots: {
