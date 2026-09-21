@@ -7,7 +7,11 @@ export function StructuredData() {
       {
         "@type": ["VacationRental", "LodgingBusiness", "LocalBusiness"],
         "@id": "https://pinadasun.com/#lodging",
-        identifier: "PinadaSun-01",
+        identifier: {
+          "@type": "PropertyValue",
+          "propertyID": "Licencia Turística",
+          "value": APARTMENT.registration
+        },
         name: APARTMENT.name,
         additionalType: "http://www.productontology.org/id/Vacation_rental",
         logo: "https://pinadasun.com/images/logopinadasun.webp",
@@ -34,18 +38,16 @@ export function StructuredData() {
           "https://pinadasun.com/images/nosotros.jpeg",
           "https://pinadasun.com/images/logopinadasun.webp",
         ],
-        containsPlace: [
-          {
-            "@type": "Apartment",
-            "name": "Apartamento completo Pinada Sun",
-            "numberOfRooms": APARTMENT.bedrooms,
-            "occupancy": {
-              "@type": "QuantitativeValue",
-              "minValue": 1,
-              "maxValue": APARTMENT.maxGuests
-            }
+        containsPlace: {
+          "@type": "Apartment",
+          "name": APARTMENT.name,
+          "numberOfRooms": APARTMENT.bedrooms,
+          "occupancy": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": APARTMENT.maxGuests
           }
-        ],
+        },
         address: {
           "@type": "PostalAddress",
           streetAddress: "Calle Galápagos 3",
