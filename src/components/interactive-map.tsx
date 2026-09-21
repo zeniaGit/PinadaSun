@@ -25,23 +25,30 @@ export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
     let isMounted = true;
+    const currentContainer = mapContainerRef.current;
 
-    import("leaflet/dist/leaflet.css");
-    import("leaflet").then((L) => {
-      if (!isMounted || !mapContainerRef.current || mapInstanceRef.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect(); // Dejar de observar una vez entra en pantalla
 
-      const position: [number, number] = [APARTMENT.lat, APARTMENT.lng];
+          // Descargar Leaflet dinámicamente solo cuando es necesario
+          import("leaflet/dist/leaflet.css");
+          import("leaflet").then((L) => {
+            if (!isMounted || !mapContainerRef.current || mapInstanceRef.current) return;
 
-      // Inicializar mapa (dragging y scrollWheel deshabilitados por defecto)
-      const map = L.map(mapContainerRef.current, {
-        center: position,
-        zoom: 17,
-        scrollWheelZoom: false,
-        dragging: false,
-        attributionControl: false,
-      });
+            const position: [number, number] = [APARTMENT.lat, APARTMENT.lng];
 
-      mapInstanceRef.current = map;
+            // Inicializar mapa (dragging y scrollWheel deshabilitados por defecto)
+            const map = L.map(mapContainerRef.current, {
+              center: position,
+              zoom: 17,
+              scrollWheelZoom: false,
+              dragging: false,
+              attributionControl: false,
+            });
+
+            mapInstanceRef.current = map;
 
       // Capa de mosaicos CartoDB Voyager (diseño limpio y moderno)
       L.tileLayer(
@@ -83,19 +90,66 @@ export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
           <a
             href="${APARTMENT.googleMapsUrl}"
             target="_blank"
-            rel="noopener noreferrer"
-            style="display: inline-block; margin-top: 8px; font-size: 11.5px; font-weight: 600; color: #c99a4e; text-decoration: underline;"
-          >
-            ${lang === "en" ? "Open Google Maps directions →" : "Cómo llegar en Google Maps →"}
-          </a>
-        </div>
-      `;
+            // Capa de mosaicos CartoDB Voyager (diseño limpio y moderno)
+            L.tileLayer(
+              "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+              {
+                maxZoom: 19,
+                subdomains: "abcd",
+              },
+            ).addTo(map);
 
-      marker.bindPopup(popupContent).openPopup();
-    });
+            // Icono personalizado con casita Material Icons
+            const customHouseIcon = L.divIcon({
+              className: "custom-house-pin",
+              html: `
+                <div class="relative flex items-center justify-center" aria-label="Ubicación de la propiedad" role="img">
+                  <span class="absolute -inset-2 rounded-full bg-sun/40 animate-ping"></span>
+                  <div class="relative flex h-11 w-11 items-center justify-center rounded-full bg-pine-deep p-2 text-sun-light shadow-xl border-2 border-sun">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                  </div>
+                  <div class="absolute -bottom-1.5 h-2 w-2 rotate-45 bg-pine-deep border-r-2 border-b-2 border-sun"></div>
+                </div>
+              `,
+              iconSize: [44, 44],
+              iconAnchor: [22, 44],
+              popupAnchor: [0, -46],
+            });
+
+            // Marcador
+            const marker = L.marker(position, { icon: customHouseIcon }).addTo(map);
+
+            const popupContent = `
+              <div style="font-family: inherit; padding: 4px 2px; text-align: center; color: #1c2833;">
+                <strong style="font-size: 14px; display: block; color: #0f3b5c;">Pinada Sun</strong>
+                <span style="font-size: 12px; color: #566573; display: block; margin-top: 2px;">
+                  ${APARTMENT.address}
+                </span>
+                <a
+                  href="${APARTMENT.googleMapsUrl}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style="display: inline-block; margin-top: 8px; font-size: 11.5px; font-weight: 600; color: #c99a4e; text-decoration: underline;"
+                >
+                  ${lang === "en" ? "Open Google Maps directions →" : "Cómo llegar en Google Maps →"}
+                </a>
+              </div>
+            `;
+
+            marker.bindPopup(popupContent).openPopup();
+          });
+        }
+      },
+      { rootMargin: "200px" } // Carga cuando está a 200px de entrar en pantalla
+    );
+
+    observer.observe(currentContainer);
 
     return () => {
       isMounted = false;
+      observer.disconnect();
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
