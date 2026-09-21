@@ -13,7 +13,7 @@ export function Logo({
     return (
       <div className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-sm ring-1 ring-black/5 ${className || "h-11 w-11"}`}>
         <img
-          src="/images/logopinadasun.webp"
+          src="/images/logopinadasun-sm.png"
           alt="PinadaSun Logo"
           className="h-full w-full object-contain"
         />
@@ -25,7 +25,7 @@ export function Logo({
     <div className={`inline-flex items-center gap-3.5 ${className}`}>
       <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-md ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-105 md:h-12 md:w-12">
         <img
-          src="/images/logopinadasun.webp"
+          src="/images/logopinadasun-sm.png"
           alt="PinadaSun Logo"
           className="h-full w-full object-contain"
         />
