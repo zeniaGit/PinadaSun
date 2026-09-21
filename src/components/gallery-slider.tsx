@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { type GalleryItem } from "@/lib/apartment";
 import { IconChevronL, IconChevronR, IconX } from "@/components/icons";
 
@@ -212,10 +213,15 @@ function LightboxModal({
   onPrev: (e?: React.MouseEvent) => void;
   onNext: (e?: React.MouseEvent) => void;
 }) {
-  return (
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md animate-in fade-in duration-200"
     >
       {/* Barra superior */}
       <div className="absolute top-4 sm:top-6 left-0 right-0 px-4 sm:px-8 flex w-full max-w-7xl mx-auto items-center justify-between z-20 pointer-events-none">
@@ -286,6 +292,7 @@ function LightboxModal({
           {items[selectedIdx].alt}
         </p>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
