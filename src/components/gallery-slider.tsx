@@ -215,10 +215,10 @@ function LightboxModal({
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md animate-in fade-in duration-200"
     >
       {/* Barra superior */}
-      <div className="absolute top-4 sm:top-6 left-0 right-0 px-4 sm:px-8 flex w-full max-w-7xl mx-auto items-center justify-between z-10">
+      <div className="absolute top-4 sm:top-6 left-0 right-0 px-4 sm:px-8 flex w-full max-w-7xl mx-auto items-center justify-between z-20 pointer-events-none">
         <div className="flex items-center gap-3">
           <span className="font-display text-base sm:text-lg font-bold text-sun-light drop-shadow-md">
             {String(selectedIdx + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
@@ -232,7 +232,7 @@ function LightboxModal({
 
         <button
           onClick={onClose}
-          className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-black/40 text-white transition-all hover:bg-black/60 active:scale-95 border border-white/20 cursor-pointer backdrop-blur-md"
+          className="pointer-events-auto flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-black/40 text-white transition-all hover:bg-black/60 active:scale-95 border border-white/20 cursor-pointer backdrop-blur-md"
           aria-label="Cerrar visor"
         >
           <IconX className="h-5 w-5" />
@@ -240,11 +240,11 @@ function LightboxModal({
       </div>
 
       {/* Contenedor central de la foto con botones de navegación */}
-      <div className="relative w-full h-full flex items-center justify-center px-2 sm:px-12">
+      <div className="absolute inset-0 flex items-center justify-center px-2 sm:px-12 pointer-events-none">
         {items.length > 1 && (
           <button
             onClick={onPrev}
-            className="absolute left-2 sm:left-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/80 hover:scale-110 active:scale-95 border border-white/20 shadow-xl cursor-pointer backdrop-blur-md"
+            className="pointer-events-auto absolute left-2 sm:left-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/80 hover:scale-110 active:scale-95 border border-white/20 shadow-xl cursor-pointer backdrop-blur-md"
             aria-label="Foto anterior"
           >
             <IconChevronL className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -254,19 +254,19 @@ function LightboxModal({
         {/* Imagen a máxima resolución y calidad */}
         <div
           onClick={(e) => e.stopPropagation()}
-          className="relative max-h-[85vh] sm:max-h-[90vh] max-w-full overflow-hidden flex items-center justify-center"
+          className="pointer-events-auto relative max-h-[80vh] sm:max-h-[90vh] max-w-full overflow-hidden flex items-center justify-center"
         >
           <img
             src={items[selectedIdx].src}
             alt={items[selectedIdx].alt}
-            className="max-h-[85vh] sm:max-h-[90vh] max-w-full object-contain transition-transform duration-300 rounded-md"
+            className="max-h-[80vh] sm:max-h-[90vh] max-w-full object-contain transition-transform duration-300 rounded-md"
           />
         </div>
 
         {items.length > 1 && (
           <button
             onClick={onNext}
-            className="absolute right-2 sm:right-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/80 hover:scale-110 active:scale-95 border border-white/20 shadow-xl cursor-pointer backdrop-blur-md"
+            className="pointer-events-auto absolute right-2 sm:right-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-black/50 text-white transition-all hover:bg-black/80 hover:scale-110 active:scale-95 border border-white/20 shadow-xl cursor-pointer backdrop-blur-md"
             aria-label="Foto siguiente"
           >
             <IconChevronR className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -277,7 +277,7 @@ function LightboxModal({
       {/* Barra inferior con pie de foto y descripción */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="absolute bottom-6 left-4 right-4 sm:left-auto sm:right-auto w-[calc(100%-2rem)] sm:w-full sm:max-w-2xl mx-auto text-center z-10 rounded-lg bg-black/60 px-4 sm:px-6 py-3 sm:py-4 border border-white/15 backdrop-blur-md shadow-2xl"
+        className="absolute bottom-6 left-4 right-4 sm:left-auto sm:right-auto w-[calc(100%-2rem)] sm:w-full sm:max-w-2xl mx-auto text-center z-20 rounded-lg bg-black/60 px-4 sm:px-6 py-3 sm:py-4 border border-white/15 backdrop-blur-md shadow-2xl pointer-events-auto"
       >
         <p className="text-sm sm:text-base font-semibold text-white">
           {items[selectedIdx].caption}
