@@ -73,7 +73,7 @@ export const IMAGES = {
   spaceB:
     "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/a4f4a5ce-fc70-4aa1-b0c2-2b6fbf5f5dfc.png?im_w=1200",
   river:
-    "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/e29271f2-d8ff-4f26-b690-beadb8f9b8f6.jpeg?im_w=1200",
+    "/images/swimming-pool.jpg",
   cathedral:
     "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/8527e351-6a31-42bc-9efb-d5fde92b72eb.jpeg?im_w=1200",
   beach: "/images/playa-v2.webp",
@@ -116,7 +116,7 @@ export const GALLERY: GalleryItem[] = [
     room: "Dormitorios",
   },
   {
-    src: "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/e29271f2-d8ff-4f26-b690-beadb8f9b8f6.jpeg?im_w=1200",
+    src: "/images/swimming-pool.jpg",
     alt: "Piscina comunitaria rodeada de jardines mediterráneos en urbanización tranquila de Villamartín",
     caption: "Piscina comunitaria y jardines",
     room: "Zonas comunes",
@@ -454,7 +454,7 @@ export const GALLERY_EN: GalleryItem[] = [
     room: "Bedrooms",
   },
   {
-    src: "https://a0.muscache.com/im/pictures/hosting/Hosting-1729850238063591911/original/e29271f2-d8ff-4f26-b690-beadb8f9b8f6.jpeg?im_w=1200",
+    src: "/images/swimming-pool.jpg",
     alt: "Community swimming pool and landscaped gardens in quiet residential complex",
     caption: "Community pool & gardens",
     room: "Amenities",
