@@ -327,6 +327,7 @@ export type Review = {
   author: string;
   from: string;
   rating?: number;
+  datePublished: string;
 };
 
 export const REVIEWS: Review[] = [
@@ -335,12 +336,14 @@ export const REVIEWS: Review[] = [
     author: "Radia",
     from: "Francia · Agosto de 2026",
     rating: 5,
+    datePublished: "2026-08-15",
   },
   {
     quote: "Alojamiento muy bonito, limpio y tranquilo con mucho espacio, y un anfitrión adorable, realmente muy disponible y de una amabilidad extraordinaria. Realmente lo recomiendo.",
     author: "Coralie",
     from: "Francia · Agosto de 2026",
     rating: 5,
+    datePublished: "2026-08-20",
   },
 ];
 
@@ -473,12 +476,14 @@ export const REVIEWS_EN: Review[] = [
     author: "[Author 1]",
     from: "[Origin 1]",
     rating: 5,
+    datePublished: "2026-08-15",
   },
   {
     quote: "[Paste the text of the second real review here]",
     author: "[Author 2]",
     from: "[Origin 2]",
     rating: 5,
+    datePublished: "2026-08-20",
   },
 ];
 
