@@ -110,6 +110,7 @@ export function StructuredData() {
             "@type": "Person",
             name: rev.author,
           },
+          datePublished: "2026-08-01",
           reviewRating: {
             "@type": "Rating",
             ratingValue: (rev.rating || 5).toString(),
