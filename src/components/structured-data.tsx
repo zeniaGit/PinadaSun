@@ -13,7 +13,7 @@ export function StructuredData() {
           "value": APARTMENT.registration
         },
         name: APARTMENT.name,
-        additionalType: "http://www.productontology.org/id/Vacation_rental",
+
         logo: "https://pinadasun.com/images/logopinadasun.webp",
         description:
           "Exclusivo apartamento en Orihuela Costa con terraza, barbacoa y piscina. 2 dormitorios a 5 min de Zenia Boulevard.",
@@ -41,9 +41,52 @@ export function StructuredData() {
         containsPlace: {
           "@type": "Apartment",
           "name": APARTMENT.name,
+          "additionalType": "https://schema.org/Accommodation",
           "numberOfRooms": APARTMENT.bedrooms,
+          "numberOfBedrooms": APARTMENT.bedrooms,
+          "numberOfBathroomsTotal": APARTMENT.bathrooms,
+          "bed": [
+            {
+              "@type": "BedDetails",
+              "numberOfBeds": 1,
+              "typeOfBed": "Queen"
+            },
+            {
+              "@type": "BedDetails",
+              "numberOfBeds": 2,
+              "typeOfBed": "Single"
+            }
+          ],
+          "amenityFeature": [
+            {
+              "@type": "LocationFeatureSpecification",
+              "name": "Piscina comunitaria",
+              "value": true
+            },
+            {
+              "@type": "LocationFeatureSpecification",
+              "name": "Gran terraza privada con pérgola y barbacoa",
+              "value": true
+            },
+            {
+              "@type": "LocationFeatureSpecification",
+              "name": "Aire acondicionado frío/calor",
+              "value": true
+            },
+            {
+              "@type": "LocationFeatureSpecification",
+              "name": "Wi-Fi de alta velocidad",
+              "value": true
+            },
+            {
+              "@type": "LocationFeatureSpecification",
+              "name": "Cocina totalmente equipada",
+              "value": true
+            }
+          ],
           "occupancy": {
             "@type": "QuantitativeValue",
+            "value": APARTMENT.maxGuests,
             "minValue": 1,
             "maxValue": APARTMENT.maxGuests
           }
