@@ -6,9 +6,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/panel", "/api/"],
+        disallow: ["/panel", "/panel/reset", "/api/"],
       },
     ],
     sitemap: "https://pinadasun.com/sitemap.xml",
+    host: "https://pinadasun.com",
   };
 }
