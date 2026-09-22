@@ -7,11 +7,7 @@ export function StructuredData() {
       {
         "@type": ["VacationRental", "LodgingBusiness", "LocalBusiness"],
         "@id": "https://pinadasun.com/#lodging",
-        identifier: {
-          "@type": "PropertyValue",
-          "propertyID": "Licencia Turística",
-          "value": APARTMENT.registration
-        },
+        identifier: "pinada-sun",
         name: APARTMENT.name,
 
         logo: "https://pinadasun.com/images/logopinadasun.webp",
@@ -39,9 +35,9 @@ export function StructuredData() {
           "https://pinadasun.com/images/logopinadasun.webp",
         ],
         containsPlace: {
-          "@type": "Apartment",
+          "@type": ["Accommodation", "Apartment"],
           "name": APARTMENT.name,
-          "additionalType": "https://schema.org/Accommodation",
+          "additionalType": "EntirePlace",
           "numberOfRooms": APARTMENT.bedrooms,
           "numberOfBedrooms": APARTMENT.bedrooms,
           "numberOfBathroomsTotal": APARTMENT.bathrooms,
