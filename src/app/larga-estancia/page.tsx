@@ -68,7 +68,7 @@ export default function LargaEstanciaPage() {
       <section className="relative flex min-h-[70vh] flex-col justify-end pt-32">
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src={IMAGES.terrace}
+            src={IMAGES.hero}
             alt="Terraza soleada ideal para estancias de invierno"
             className="kb h-full w-full object-cover"
           />

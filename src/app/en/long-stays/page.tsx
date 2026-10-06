@@ -68,7 +68,7 @@ export default function LongStaysPage() {
       <section className="relative flex min-h-[70vh] flex-col justify-end pt-32">
         <div className="absolute inset-0 overflow-hidden">
           <img
-            src={IMAGES.terrace}
+            src={IMAGES.hero}
             alt="Sunny terrace ideal for winter stays"
             className="kb h-full w-full object-cover"
           />
