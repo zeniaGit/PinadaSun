@@ -45,6 +45,13 @@ export const metadata: Metadata = {
 
 const ARTICLES = [
   {
+    slug: "/guia-local/consejos-seguridad-orihuela-costa",
+    badge: "Prevención & Ayuda",
+    title: "Consejos de seguridad, carteristas y teléfonos de emergencia",
+    desc: "Cómo evitar robos al aparcar tu coche, vigilancia de objetos personales en la playa y listado de teléfonos de Policía y 112.",
+    readTime: "3 min",
+  },
+  {
     slug: "/guia-local/costumbres-y-normas",
     badge: "Costumbres & Usos",
     title: "Costumbres locales y normas prácticas en Orihuela Costa: Guía para el viajero",
