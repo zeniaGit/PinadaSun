@@ -1,121 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { APARTMENT } from "@/lib/apartment";
 import { IconPin, IconExternalLink } from "@/components/icons";
 
 export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<import("leaflet").Map | null>(null);
   const [mapActive, setMapActive] = useState(false);
 
-  // Activa/desactiva interacción con el mapa
-  const activateMap = () => {
-    setMapActive(true);
-    const m = mapInstanceRef.current;
-    if (m) { m.dragging.enable(); m.scrollWheelZoom.enable(); }
-  };
-  const deactivateMap = () => {
-    setMapActive(false);
-    const m = mapInstanceRef.current;
-    if (m) { m.dragging.disable(); m.scrollWheelZoom.disable(); }
-  };
-
-  useEffect(() => {
-    if (!mapContainerRef.current || mapInstanceRef.current) return;
-
-    let isMounted = true;
-    const currentContainer = mapContainerRef.current;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          observer.disconnect(); // Dejar de observar una vez entra en pantalla
-
-          // Descargar Leaflet dinámicamente solo cuando es necesario
-          import("leaflet/dist/leaflet.css");
-          import("leaflet").then((L) => {
-            if (!isMounted || !mapContainerRef.current || mapInstanceRef.current) return;
-
-            const position: [number, number] = [APARTMENT.lat, APARTMENT.lng];
-
-            // Inicializar mapa (dragging y scrollWheel deshabilitados por defecto)
-            const map = L.map(mapContainerRef.current, {
-              center: position,
-              zoom: 17,
-              scrollWheelZoom: false,
-              dragging: false,
-              attributionControl: false,
-            });
-
-            mapInstanceRef.current = map;
-
-      // Capa de mosaicos CartoDB Voyager (diseño limpio y moderno)
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-        {
-          maxZoom: 19,
-          subdomains: "abcd",
-        },
-      ).addTo(map);
-
-      // Icono personalizado con casita Material Icons
-      const customHouseIcon = L.divIcon({
-        className: "custom-house-pin",
-        html: `
-          <div class="relative flex items-center justify-center" aria-label="Ubicación de la propiedad" role="img">
-            <span class="absolute -inset-2 rounded-full bg-sun/40 animate-ping"></span>
-            <div class="relative flex h-11 w-11 items-center justify-center rounded-full bg-pine-deep p-2 text-sun-light shadow-xl border-2 border-sun">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-              </svg>
-            </div>
-            <div class="absolute -bottom-1.5 h-2 w-2 rotate-45 bg-pine-deep border-r-2 border-b-2 border-sun"></div>
-          </div>
-        `,
-        iconSize: [44, 44],
-        iconAnchor: [22, 44],
-        popupAnchor: [0, -46],
-      });
-
-      // Marcador
-      const marker = L.marker(position, { icon: customHouseIcon }).addTo(map);
-
-      const popupContent = `
-        <div style="font-family: inherit; padding: 4px 2px; text-align: center; color: #1c2833;">
-          <strong style="font-size: 14px; display: block; color: #0f3b5c;">Pinada Sun</strong>
-          <span style="font-size: 12px; color: #566573; display: block; margin-top: 2px;">
-            ${APARTMENT.address}
-          </span>
-          <a
-            href="${APARTMENT.googleMapsUrl}"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="display: inline-block; margin-top: 8px; font-size: 11.5px; font-weight: 600; color: #c99a4e; text-decoration: underline;"
-          >
-            ${lang === "en" ? "Open Google Maps directions →" : "Cómo llegar en Google Maps →"}
-          </a>
-        </div>
-      `;
-
-      marker.bindPopup(popupContent).openPopup();
-    });
-  }
-      },
-      { rootMargin: "200px" } // Carga cuando está a 200px de entrar en pantalla
-    );
-
-    observer.observe(currentContainer);
-
-    return () => {
-      isMounted = false;
-      observer.disconnect();
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
-  }, [lang]);
+  // URL del mapa incrustado gratuito de Google Maps (no requiere API Key)
+  const embedUrl = `https://maps.google.com/maps?q=${APARTMENT.lat},${APARTMENT.lng}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-cream/20 bg-pine-deep shadow-2xl">
@@ -134,24 +27,30 @@ export function InteractiveMap({ lang = "es" }: { lang?: "es" | "en" }) {
           <IconExternalLink className="h-4 w-4" />
         </a>
       </div>
-      {/* Contenedor relativo para poder superponer el overlay */}
-      <div className="relative">
-        <div
-          ref={mapContainerRef}
-          className="h-[360px] w-full sm:h-[440px] z-0"
-          style={{ minHeight: "360px" }}
-          onMouseLeave={deactivateMap}
+      
+      {/* Contenedor relativo para el iframe y el overlay */}
+      <div className="relative h-[360px] w-full sm:h-[440px]">
+        {/* Iframe de Google Maps gratuito */}
+        <iframe 
+          src={embedUrl}
+          width="100%" 
+          height="100%" 
+          style={{ border: 0, pointerEvents: mapActive ? "auto" : "none" }} 
+          allowFullScreen={false} 
+          loading="lazy" 
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Google Map"
         />
+
         {/* Overlay: bloquea el mapa hasta que el usuario hace clic */}
         {!mapActive && (
           <div
-            className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-transparent"
-            onClick={activateMap}
-            onTouchStart={activateMap}
+            className="absolute inset-0 z-10 flex cursor-pointer items-center justify-center bg-black/10"
+            onClick={() => setMapActive(true)}
             aria-label={lang === "en" ? "Click to interact with the map" : "Toca para interactuar con el mapa"}
           >
-            <span className="rounded-full bg-pine-deep/80 px-4 py-2 text-xs font-semibold tracking-wide text-cream/90 shadow-lg backdrop-blur-sm select-none">
-              {lang === "en" ? "Click to interact" : "Toca para interactuar"}
+            <span className="rounded-full bg-pine-deep/90 px-4 py-2 text-xs font-semibold tracking-wide text-cream/90 shadow-lg backdrop-blur-sm select-none transition-transform hover:scale-105 border border-sun/30">
+              {lang === "en" ? "Click to interact" : "Toca para interactuar con el mapa"}
             </span>
           </div>
         )}
