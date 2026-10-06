@@ -745,9 +745,21 @@ export default async function Home() {
                 <span className="text-[14px]">👁</span> {uniqueVisits} visitas
               </span>
             </div>
-            <a href="/panel" className="transition-colors hover:text-sun-light">
-              Panel de administración →
-            </a>
+            <div className="flex items-center gap-6">
+              <a href="/panel" className="transition-colors hover:text-sun-light">
+                Panel de administración →
+              </a>
+              <a 
+                href="https://seasoft.es" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
+                title="Diseñado y Desarrollado por Seasoft.es"
+              >
+                <span className="text-[10px] tracking-widest uppercase">by</span>
+                <img src="https://seasoft.es/SEASOFT.svg" alt="Seasoft Logo" className="h-4 w-auto brightness-0 invert" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>

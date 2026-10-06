@@ -57,6 +57,7 @@ export function AnalyticsTracker() {
           (window as any).callPhantom
         );
 
+        // Tracker de Next.js
         fetch("/api/analytics/track", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -66,6 +67,14 @@ export function AnalyticsTracker() {
             referrer: document.referrer || null,
             isWebdriver,
           }),
+          keepalive: true,
+        }).catch(() => {});
+        
+        // Tracker de FastAPI (reporte diario)
+        fetch("https://api.pinadasun.com/api/track-visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pathname: pathname || "/" }),
           keepalive: true,
         }).catch(() => {});
       } catch {}
