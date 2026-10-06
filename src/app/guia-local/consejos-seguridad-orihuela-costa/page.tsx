@@ -33,6 +33,14 @@ export default function ConsejosSeguridadPage() {
           <span>Lectura: 3 min</span>
         </div>
 
+        <div className="mt-10 overflow-hidden rounded-2xl shadow-sm border border-line">
+          <img 
+            src="/images/lifeguard-safety.jpg" 
+            alt="Puesto de socorrista en la playa simbolizando seguridad" 
+            className="w-full h-auto object-cover max-h-[400px]"
+          />
+        </div>
+
         <article className="prose prose-pine mt-12 max-w-none text-[16px] leading-relaxed text-ink/90 prose-h2:font-display prose-h2:text-3xl prose-h2:text-pine-deep prose-h2:mt-12 prose-h3:text-xl prose-h3:text-pine prose-h3:mt-8 prose-li:my-2 prose-a:text-sun prose-a:font-semibold hover:prose-a:text-sun-light">
           
           <p className="lead text-lg text-ink-soft">
