@@ -781,7 +781,11 @@ export default async function Home() {
                 className="opacity-70 hover:opacity-100 transition-opacity"
                 title="Diseño SeaSoft"
               >
-                <img src="/images/seasoft.png" alt="Seasoft Logo" className="h-4 sm:h-5 w-auto brightness-0 invert" />
+                <img 
+                  src="/images/seasoft.png" 
+                  alt="Seasoft Logo" 
+                  style={{ height: "20px", width: "auto", maxWidth: "100px", filter: "brightness(0) invert(1)" }} 
+                />
               </a>
             </div>
           </div>
