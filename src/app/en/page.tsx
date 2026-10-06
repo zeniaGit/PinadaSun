@@ -550,9 +550,20 @@ export default function EnglishHomePage() {
                 Local Guide & Rules
               </a>
             </div>
-            <a href="/panel" className="transition-colors hover:text-sun-light">
-              Admin Login →
-            </a>
+            <div className="flex items-center gap-6">
+              <a href="/panel" className="transition-colors hover:text-sun-light">
+                Admin Login →
+              </a>
+              <a 
+                href="https://seasoft.es" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="opacity-70 hover:opacity-100 transition-opacity"
+                title="Designed by SeaSoft"
+              >
+                <img src="/images/seasoft.png" alt="Seasoft Logo" className="h-4 sm:h-5 w-auto brightness-0 invert" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>

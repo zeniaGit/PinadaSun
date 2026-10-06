@@ -778,11 +778,10 @@ export default async function Home() {
                 href="https://seasoft.es" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity"
-                title="Diseñado y Desarrollado por Seasoft.es"
+                className="opacity-70 hover:opacity-100 transition-opacity"
+                title="Diseño SeaSoft"
               >
-                <span className="text-[10px] tracking-widest uppercase">by</span>
-                <img src="https://seasoft.es/SEASOFT.svg" alt="Seasoft Logo" className="h-4 w-auto brightness-0 invert" />
+                <img src="/images/seasoft.png" alt="Seasoft Logo" className="h-4 sm:h-5 w-auto brightness-0 invert" />
               </a>
             </div>
           </div>
