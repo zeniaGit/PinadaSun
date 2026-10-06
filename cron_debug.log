@@ -1,0 +1,14 @@
++ LOG_FILE=/var/log/pinadasun_visitors.log
+++ python3 -c 'from datetime import datetime, timedelta; print((datetime.now() - timedelta(days=1)).strftime('\''%d/%b/%Y'\''))'
++ DATE_YESTERDAY=04/Oct/2026
++ REPORT='======================================\n'
++ REPORT+=' PinadaSun Visitor Report for 04/Oct/2026\n'
++ REPORT+='======================================\n\n'
++ '[' '!' -f /var/log/pinadasun_visitors.log ']'
++ echo -e '======================================\n PinadaSun Visitor Report for 04/Oct/2026\n======================================\n\nAún no hay visitas registradas (el archivo de log no existe).'
+======================================
+ PinadaSun Visitor Report for 04/Oct/2026
+======================================
+
+Aún no hay visitas registradas (el archivo de log no existe).
++ exit 0

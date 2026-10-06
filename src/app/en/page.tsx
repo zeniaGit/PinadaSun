@@ -412,6 +412,28 @@ export default function EnglishHomePage() {
           ))}
         </div>
       </section>
+      {/* ═══ TEASER LARGA ESTANCIA ═══ */}
+      <section className="bg-pine text-cream py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 text-center md:px-8">
+          <Reveal>
+            <h2 className="font-display text-3xl tracking-tight text-sun md:text-4xl">
+              Winter Sun & Remote Work
+            </h2>
+            <p className="mt-4 text-[16px] leading-relaxed text-cream/90">
+              Discover our special monthly rates for medium and long-term stays (1+ months). High-speed fibre optic, ideal climate, and a sunny terrace all winter long.
+            </p>
+            <div className="mt-8">
+              <a
+                href="/en/long-stays"
+                className="inline-flex items-center gap-2 rounded-full border border-sun/50 bg-sun/10 px-6 py-3 text-[14px] font-semibold text-sun-light transition-colors hover:bg-sun hover:text-pine-deep"
+              >
+                Explore Long Stays
+                <IconArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ═══ DIRECT BOOKING WIDGET ═══ */}
       <section id="booking" className="border-t border-line bg-paper/60">
@@ -493,6 +515,9 @@ export default function EnglishHomePage() {
             <p className="text-[14px] leading-relaxed text-cream/70">
               Flexible cancellation and transparent terms. Highest hygiene and comfort guaranteed.
             </p>
+            <a href="/en/long-stays" className="mt-2 inline-block text-[14px] text-sun-light transition-colors hover:text-cream">
+              View conditions for monthly rentals →
+            </a>
           </div>
         </div>
 

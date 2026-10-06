@@ -604,6 +604,28 @@ export default async function Home() {
           </Reveal>
         </div>
       </section>
+      {/* ═══ TEASER LARGA ESTANCIA ═══ */}
+      <section className="bg-pine text-cream py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 text-center md:px-8">
+          <Reveal>
+            <h2 className="font-display text-3xl tracking-tight text-sun md:text-4xl">
+              ¿Buscas escapar del frío o teletrabajar?
+            </h2>
+            <p className="mt-4 text-[16px] leading-relaxed text-cream/90">
+              Descubre nuestras tarifas especiales para estancias de temporada (más de 1 mes). Fibra óptica, clima ideal y terraza soleada todo el invierno.
+            </p>
+            <div className="mt-8">
+              <a
+                href="/larga-estancia"
+                className="inline-flex items-center gap-2 rounded-full border border-sun/50 bg-sun/10 px-6 py-3 text-[14px] font-semibold text-sun-light transition-colors hover:bg-sun hover:text-pine-deep"
+              >
+                Ver condiciones de Larga Estancia
+                <IconArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ═══ RESERVA DIRECTA ═══ */}
       <section id="reserva" className="border-t border-line bg-paper/60">
@@ -702,7 +724,10 @@ export default async function Home() {
             <p className="text-[14px] leading-relaxed text-cream/70">
               Condiciones claras y cancelación flexible. Máxima higiene certificada antes de cada llegada.
             </p>
-            <p className="tnum text-[12.5px] text-cream/50">
+            <a href="/larga-estancia" className="mt-2 inline-block text-[14px] text-sun-light transition-colors hover:text-cream">
+              Ver condiciones para alquiler por meses →
+            </a>
+            <p className="tnum mt-2 text-[12.5px] text-cream/50">
               {APARTMENT.ibl}
             </p>
           </div>

@@ -10,6 +10,7 @@ const LINKS_ES = [
   { href: "/#galeria", label: "Galería" },
   { href: "/#entorno", label: "Ubicación" },
   { href: "/#opiniones", label: "Opiniones" },
+  { href: "/larga-estancia", label: "Alquiler por meses" },
   { href: "/guia-local", label: "Guía Local" },
 ];
 
@@ -19,7 +20,8 @@ const LINKS_EN = [
   { href: "/en#gallery", label: "Gallery" },
   { href: "/en#location", label: "Location" },
   { href: "/en#reviews", label: "Reviews" },
-  { href: "/guia-local", label: "Local Guide" },
+  { href: "/en/long-stays", label: "Long Stays" },
+  { href: "/en/guia-local", label: "Local Guide" },
 ];
 
 export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
