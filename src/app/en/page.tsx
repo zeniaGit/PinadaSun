@@ -109,7 +109,13 @@ function SectionLabel({
   );
 }
 
-export default function EnglishHomePage() {
+import { getUniqueIpCount } from "@/lib/store";
+import { unstable_noStore as noStore } from "next/cache";
+
+export default async function EnglishHomePage() {
+  noStore();
+  const uniqueVisits = await getUniqueIpCount();
+
   return (
     <div id="top" className="overflow-x-clip bg-linen">
       <Header lang="en" />
@@ -549,6 +555,10 @@ export default function EnglishHomePage() {
               <a href="/guia-local" className="transition-colors hover:text-sun-light underline">
                 Local Guide & Rules
               </a>
+              <span className="hidden sm:inline text-cream/20">|</span>
+              <span title="Unique visitors counted by IP" className="flex items-center gap-1.5 text-cream/70">
+                <span className="text-[14px]">👁</span> {uniqueVisits} visits
+              </span>
             </div>
             <div className="flex items-center gap-6">
               <a href="/panel" className="transition-colors hover:text-sun-light">
