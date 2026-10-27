@@ -51,6 +51,7 @@ export const metadata: Metadata = {
       "es-ES": "https://pinadasun.com",
       "en-US": "https://pinadasun.com/en",
       "en-GB": "https://pinadasun.com/en",
+      "x-default": "https://pinadasun.com",
     },
   },
   icons: {
@@ -102,22 +103,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="dns-prefetch" href="https://a0.muscache.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <StructuredData />
-        <script
-          id="google-consent-mode"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('consent', 'default', {
-                'ad_storage': 'denied',
-                'ad_user_data': 'denied',
-                'ad_personalization': 'denied',
-                'analytics_storage': 'denied',
-                'wait_for_update': 500
-              });
-            `,
-          }}
-        />
+        <Script id="google-consent-mode" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'analytics_storage': 'denied',
+              'wait_for_update': 500
+            });
+          `}
+        </Script>
       </head>
       <body className="font-body antialiased">
         <noscript>

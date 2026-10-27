@@ -70,13 +70,21 @@ export function AnalyticsTracker() {
           keepalive: true,
         }).catch(() => {});
         
-        // Tracker de FastAPI (reporte diario)
-        fetch("https://api.pinadasun.com/api/track-visit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pathname: pathname || "/" }),
-          keepalive: true,
-        }).catch(() => {});
+        // Tracker de FastAPI (reporte diario): solo en el dominio de producción
+        const isLocalHost =
+          typeof window !== "undefined" &&
+          (window.location.hostname === "localhost" ||
+            window.location.hostname === "127.0.0.1" ||
+            window.location.hostname.endsWith(".local"));
+
+        if (!isLocalHost) {
+          fetch("https://api.pinadasun.com/api/track-visit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pathname: pathname || "/" }),
+            keepalive: true,
+          }).catch(() => {});
+        }
       } catch {}
     });
 

@@ -4,6 +4,7 @@ import { Reveal, MaskLines } from "@/components/reveal";
 import { BookingWidget, StarRow } from "@/components/booking/booking-widget";
 import { GallerySlider, DetailPhotoGrid } from "@/components/gallery-slider";
 import { InteractiveMap } from "@/components/interactive-map";
+import { ClimogramaSection } from "@/components/climograma";
 import { Logo } from "@/components/logo";
 import {
   PartnerTrustBar,
@@ -57,6 +58,7 @@ export const metadata: Metadata = {
       "es-ES": "https://pinadasun.com",
       "en-US": "https://pinadasun.com/en",
       "en-GB": "https://pinadasun.com/en",
+      "x-default": "https://pinadasun.com",
     },
   },
   openGraph: {
@@ -296,6 +298,9 @@ export default async function EnglishHomePage() {
         </div>
       </section>
 
+      {/* ═══ CLIMATE & SUNSHINE LEISURE ═══ */}
+      <ClimogramaSection lang="en" />
+
       {/* ═══ THE APARTMENT & AMENITIES ═══ */}
       <section id="space" className="mx-auto max-w-7xl px-5 py-24 md:px-8 md:py-32">
         <div className="mb-14 max-w-2xl">
@@ -393,7 +398,7 @@ export default async function EnglishHomePage() {
       {/* ═══ REVIEWS ═══ */}
       <section id="reviews" className="mx-auto max-w-7xl px-5 py-24 md:px-8 md:py-32">
         <div className="mb-12 max-w-2xl">
-          <SectionLabel color="gold">Verified Guest Reviews</SectionLabel>
+          <SectionLabel color="gold">Guest Reviews</SectionLabel>
           <Reveal>
             <h2 className="font-display text-4xl tracking-tight md:text-5xl text-ink">
               What our guests say
@@ -552,7 +557,7 @@ export default async function EnglishHomePage() {
             <div className="flex flex-wrap items-center gap-4">
               <p>© 2026 {APARTMENT.name} · {APARTMENT.domain} · All rights reserved.</p>
               <span className="hidden sm:inline text-cream/20">|</span>
-              <a href="/guia-local" className="transition-colors hover:text-sun-light underline">
+              <a href="/en/guia-local" className="transition-colors hover:text-sun-light underline">
                 Local Guide & Rules
               </a>
               <span className="hidden sm:inline text-cream/20">|</span>

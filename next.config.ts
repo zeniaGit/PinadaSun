@@ -6,7 +6,7 @@ const cspHeader = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://images.pexels.com https://a0.muscache.com https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.googletagmanager.com;
   font-src 'self' data:;
-  connect-src 'self' https://calendario.nas-lazenia.synology.me https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.basemaps.cartocdn.com;
+  connect-src 'self' https://api.pinadasun.com https://calendario.nas-lazenia.synology.me https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.basemaps.cartocdn.com;
   frame-src 'self' https://www.googletagmanager.com https://maps.google.com https://www.google.com;
   object-src 'none';
   base-uri 'self';
@@ -18,9 +18,6 @@ const nextConfig: NextConfig = {
   output: "standalone",
   compress: true,
   poweredByHeader: false,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },

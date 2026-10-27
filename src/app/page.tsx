@@ -4,6 +4,7 @@ import { Reveal, MaskLines } from "@/components/reveal";
 import { BookingWidget, StarRow } from "@/components/booking/booking-widget";
 import { GallerySlider, DetailPhotoGrid } from "@/components/gallery-slider";
 import { InteractiveMap } from "@/components/interactive-map";
+import { ClimogramaSection } from "@/components/climograma";
 import { Logo } from "@/components/logo";
 import {
   PartnerTrustBar,
@@ -266,6 +267,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ═══ CLIMOGRAMA & MICROCLIMA (GUIÑO AL SOL Y AL OCIO) ═══ */}
+      <ClimogramaSection />
 
       {/* ═══ EL ESPACIO & CALIDADES ═══ */}
       <section id="espacio" className="bg-cream">
