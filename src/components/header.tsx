@@ -29,6 +29,8 @@ const ENGLISH_ROUTE_FALLBACKS = new Set([
   "/guia-local/normas-rotondas-espana",
 ]);
 
+const ENGLISH_ROUTE_PATHS = new Map([["/larga-estancia", "/long-stays"]]);
+
 export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname() || "/";
@@ -44,7 +46,7 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
       ? "/en"
       : ENGLISH_ROUTE_FALLBACKS.has(pathWithoutLang)
         ? "/en/guia-local"
-        : `/en${pathWithoutLang}`;
+        : `/en${ENGLISH_ROUTE_PATHS.get(pathWithoutLang) ?? pathWithoutLang}`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
