@@ -30,6 +30,7 @@ const ENGLISH_ROUTE_FALLBACKS = new Set([
 ]);
 
 const ENGLISH_ROUTE_PATHS = new Map([["/larga-estancia", "/long-stays"]]);
+const SPANISH_ROUTE_PATHS = new Map([["/long-stays", "/larga-estancia"]]);
 
 export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
   const [scrolled, setScrolled] = useState(false);
@@ -40,7 +41,7 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
     ? pathname.replace(/^\/en/, "") || "/"
     : pathname;
 
-  const esUrl = pathWithoutLang;
+  const esUrl = SPANISH_ROUTE_PATHS.get(pathWithoutLang) ?? pathWithoutLang;
   const enUrl =
     pathWithoutLang === "/"
       ? "/en"
