@@ -1,4 +1,4 @@
-import { APARTMENT, REVIEWS } from "@/lib/apartment";
+import { APARTMENT } from "@/lib/apartment";
 
 export function StructuredData() {
   const structuredData = {
@@ -138,75 +138,8 @@ export function StructuredData() {
             value: true,
           },
         ],
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: APARTMENT.rating.toString(),
-          bestRating: "5",
-          worstRating: "1",
-          ratingCount: APARTMENT.reviewCount.toString(),
-        },
-        review: REVIEWS.map((rev) => ({
-          "@type": "Review",
-          author: {
-            "@type": "Person",
-            name: rev.author,
-          },
-          datePublished: rev.datePublished,
-          reviewRating: {
-            "@type": "Rating",
-            ratingValue: (rev.rating || 5).toString(),
-            bestRating: "5",
-          },
-          reviewBody: rev.quote,
-        })),
         sameAs: [
           "https://g.page/r/CX3tNGuZfWsbEBM/review",
-        ],
-      },
-      {
-        "@type": "FAQPage",
-        "@id": "https://pinadasun.com/#faq",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "¿Cuál es el horario de check-in y check-out en Pinada Sun?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `El check-in se realiza a partir de las ${APARTMENT.checkIn} y el check-out hasta las ${APARTMENT.checkOut}.`,
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Cuántos huéspedes pueden alojarse?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `La capacidad máxima es de ${APARTMENT.maxGuests} huéspedes en ${APARTMENT.bedrooms} dormitorios con ${APARTMENT.beds} camas.`,
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Cuál es la estancia mínima en Pinada Sun?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `La estancia mínima es de ${APARTMENT.minNights} noches para garantizar una experiencia de descanso óptima.`,
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Dispone de terraza privada y barbacoa?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Sí, la vivienda dispone de una amplia terraza privada con zona de porche, comedor exterior, barbacoa y acceso a la piscina comunitaria.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿A qué distancia se encuentra de Zenia Boulevard y las playas?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Se encuentra a solo 5 minutos en coche del centro comercial Zenia Boulevard y a 10 minutos de las playas y calas con Bandera Azul de Orihuela Costa (La Zenia, Cala Capitán, Playa Flamenca).",
-            },
-          },
         ],
       },
     ],

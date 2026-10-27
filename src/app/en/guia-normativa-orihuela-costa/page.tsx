@@ -27,6 +27,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://pinadasun.com/en/guia-normativa-orihuela-costa",
+    languages: {
+      "es-ES": "https://pinadasun.com/guia-normativa-orihuela-costa",
+      "en-GB": "https://pinadasun.com/en/guia-normativa-orihuela-costa",
+      "x-default": "https://pinadasun.com/guia-normativa-orihuela-costa",
+    },
   },
   openGraph: {
     type: "article",

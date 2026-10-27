@@ -24,6 +24,11 @@ const LINKS_EN = [
   { href: "/en/guia-local", label: "Local Guide" },
 ];
 
+const ENGLISH_ROUTE_FALLBACKS = new Set([
+  "/guia-local/consejos-seguridad-orihuela-costa",
+  "/guia-local/normas-rotondas-espana",
+]);
+
 export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname() || "/";
@@ -34,7 +39,12 @@ export function Header({ lang = "es" }: { lang?: "es" | "en" }) {
     : pathname;
 
   const esUrl = pathWithoutLang;
-  const enUrl = pathWithoutLang === "/" ? "/en" : `/en${pathWithoutLang}`;
+  const enUrl =
+    pathWithoutLang === "/"
+      ? "/en"
+      : ENGLISH_ROUTE_FALLBACKS.has(pathWithoutLang)
+        ? "/en/guia-local"
+        : `/en${pathWithoutLang}`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

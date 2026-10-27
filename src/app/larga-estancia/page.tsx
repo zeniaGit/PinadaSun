@@ -11,6 +11,11 @@ export const metadata: Metadata = {
     "Escapa del frío y teletrabaja desde Orihuela Costa. Tarifas especiales para estancias de media y larga temporada. Fibra óptica, mesa de trabajo y terraza soleada.",
   alternates: {
     canonical: "https://pinadasun.com/larga-estancia",
+    languages: {
+      "es-ES": "https://pinadasun.com/larga-estancia",
+      "en-GB": "https://pinadasun.com/en/long-stays",
+      "x-default": "https://pinadasun.com/larga-estancia",
+    },
   },
 };
 

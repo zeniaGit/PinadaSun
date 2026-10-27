@@ -25,6 +25,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://pinadasun.com/en/guia-local/costumbres-y-normas",
+    languages: {
+      "es-ES": "https://pinadasun.com/guia-local/costumbres-y-normas",
+      "en-GB": "https://pinadasun.com/en/guia-local/costumbres-y-normas",
+      "x-default": "https://pinadasun.com/guia-local/costumbres-y-normas",
+    },
   },
   openGraph: {
     type: "article",

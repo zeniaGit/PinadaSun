@@ -472,16 +472,16 @@ export const PLACES_EN: Place[] = [
 
 export const REVIEWS_EN: Review[] = [
   {
-    quote: "[Paste the text of the first real review here]",
-    author: "[Author 1]",
-    from: "[Origin 1]",
+    quote: "We had an absolutely wonderful stay in this beautiful home in Alicante. Everything was perfect: the house is lovely, very clean, welcoming and tastefully decorated. We felt at home from the moment we arrived. Thank you to our hosts for their exceptional welcome, kindness and generosity. We will also remember their adorable little girl fondly. We would highly recommend this accommodation and would happily return. We made wonderful family memories.",
+    author: "Radia",
+    from: "France · August 2026",
     rating: 5,
     datePublished: "2026-08-15",
   },
   {
-    quote: "[Paste the text of the second real review here]",
-    author: "[Author 2]",
-    from: "[Origin 2]",
+    quote: "A beautiful, clean and peaceful place with plenty of space, and a lovely host who was always available and exceptionally kind. I highly recommend it.",
+    author: "Coralie",
+    from: "France · August 2026",
     rating: 5,
     datePublished: "2026-08-20",
   },

@@ -11,6 +11,11 @@ export const metadata: Metadata = {
     "Escape the winter and work remotely from Orihuela Costa. Special monthly rates for medium and long-term stays. High-speed Wi-Fi and a sunny terrace.",
   alternates: {
     canonical: "https://pinadasun.com/en/long-stays",
+    languages: {
+      "es-ES": "https://pinadasun.com/larga-estancia",
+      "en-GB": "https://pinadasun.com/en/long-stays",
+      "x-default": "https://pinadasun.com/larga-estancia",
+    },
   },
 };
 

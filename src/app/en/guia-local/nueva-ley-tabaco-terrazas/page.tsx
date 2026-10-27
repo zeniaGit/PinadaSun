@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://pinadasun.com/en/guia-local/nueva-ley-tabaco-terrazas",
+    languages: {
+      "es-ES": "https://pinadasun.com/guia-local/nueva-ley-tabaco-terrazas",
+      "en-GB": "https://pinadasun.com/en/guia-local/nueva-ley-tabaco-terrazas",
+      "x-default": "https://pinadasun.com/guia-local/nueva-ley-tabaco-terrazas",
+    },
   },
   openGraph: {
     type: "article",

@@ -23,6 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "https://pinadasun.com/en/guia-local",
+    languages: {
+      "es-ES": "https://pinadasun.com/guia-local",
+      "en-GB": "https://pinadasun.com/en/guia-local",
+      "x-default": "https://pinadasun.com/guia-local",
+    },
   },
   openGraph: {
     type: "website",
